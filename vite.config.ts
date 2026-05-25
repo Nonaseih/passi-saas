@@ -12,4 +12,17 @@ export default defineConfig({
   server: {
     port: 5173,
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+          'vendor-supabase': ['@supabase/supabase-js'],
+          'vendor-stripe': ['@stripe/stripe-js'],
+          'vendor-qr': ['qrcode', 'html5-qrcode'],
+          'vendor-idb': ['idb'],
+        },
+      },
+    },
+  },
 })
