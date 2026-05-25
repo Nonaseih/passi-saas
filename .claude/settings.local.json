@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:mobile-app-code.vercel.app)",
+      "Bash(npm create *)",
+      "Bash(npx create-vite@latest . --template react-ts)",
+      "Bash(npm install *)",
+      "Bash(npx tsc *)",
+      "Bash(npx vite *)",
+      "Bash(cd \"/c/Users/fortu/OneDrive/Desktop/New Project\" && find src supabase -type f | sort 2>&1)"
+    ]
+  }
+}

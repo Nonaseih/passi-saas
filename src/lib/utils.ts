@@ -1,0 +1,32 @@
+import { type ClassValue, clsx } from 'clsx'
+import { twMerge } from 'tailwind-merge'
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
+}
+
+export function formatPrice(amount: number, currency = 'JPY'): string {
+  return new Intl.NumberFormat('ja-JP', {
+    style: 'currency',
+    currency,
+    minimumFractionDigits: 0,
+  }).format(amount)
+}
+
+export function formatDate(dateStr: string): string {
+  return new Intl.DateTimeFormat('ja-JP', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(new Date(dateStr))
+}
+
+export function generateDeviceId(): string {
+  const stored = localStorage.getItem('device_id')
+  if (stored) return stored
+  const id = crypto.randomUUID()
+  localStorage.setItem('device_id', id)
+  return id
+}
