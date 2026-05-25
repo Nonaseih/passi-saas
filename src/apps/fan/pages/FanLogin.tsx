@@ -1,22 +1,31 @@
-import { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { useNavigate, Link, useSearchParams } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 
 export function FanLogin() {
   const { signIn } = useAuth()
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const [notice, setNotice] = useState('')
   const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    if (searchParams.get('confirmed') === 'true') {
+      setNotice('メールアドレスの確認が完了しました。ログインしてください。')
+    }
+  }, [searchParams])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setError('')
+    setNotice('')
     setLoading(true)
     try {
       await signIn(email, password)
-      navigate('/')
+      navigate('/tickets')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'ログインに失敗しました')
     } finally {
@@ -33,6 +42,11 @@ export function FanLogin() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          {notice && (
+            <p className="rounded-lg bg-green-50 px-4 py-2 text-sm text-green-700 text-center">
+              {notice}
+            </p>
+          )}
           {error && (
             <p className="text-sm text-destructive text-center">{error}</p>
           )}
@@ -52,6 +66,11 @@ export function FanLogin() {
             required
             className="w-full rounded-lg border px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
           />
+          <div className="text-right">
+            <Link to="/forgot-password" className="text-xs text-muted-foreground hover:text-primary">
+              パスワードをお忘れですか？
+            </Link>
+          </div>
           <button
             type="submit"
             disabled={loading}
