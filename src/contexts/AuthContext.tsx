@@ -35,9 +35,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     })
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (_event, session) => {
+      async (event, session) => {
         setSession(session)
         if (session?.user) {
+          // On first signup, insert the profile row before fetching it.
+          // This avoids a race condition where fetchUserProfile runs before
+          // the signUp() caller gets to its own insert.
+          if (event === 'SIGNED_UP') {
+            const displayName =
+              session.user.user_metadata?.display_name ??
+              session.user.email ??
+              ''
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            await (supabase.from('users') as any).upsert(
+              {
+                id: session.user.id,
+                email: session.user.email ?? '',
+                display_name: displayName,
+                role: 'fan',
+              },
+              { onConflict: 'id' }
+            )
+          }
           await fetchUserProfile(session.user.id)
         } else {
           setUser(null)
@@ -80,7 +99,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   async function signUp(email: string, password: string, displayName: string) {
-    const { data, error } = await supabase.auth.signUp({
+    // Profile row is created in onAuthStateChange (SIGNED_UP event) to avoid
+    // a race condition. We only need to trigger the auth signup here.
+    const { error } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -89,16 +110,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       },
     })
     if (error) throw new Error(error.message)
-
-    if (data.user) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await (supabase.from('users') as any).insert({
-        id: data.user.id,
-        email,
-        display_name: displayName,
-        role: 'fan',
-      })
-    }
   }
 
   async function signOut() {
