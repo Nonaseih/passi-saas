@@ -15,8 +15,8 @@
 
 DO $$
 DECLARE
-  v_admin_id UUID := 'YOUR-ADMIN-USER-UUID-HERE';
-  v_fan_id   UUID := 'YOUR-FAN-USER-UUID-HERE';
+  v_admin_id UUID := 'f53f6681-df2f-4198-87a2-d76fb3b0ea4e';
+  v_fan_id   UUID := '3bc08f8d-cfe5-4dbd-9da3-2bef71fe0b46';
   v_event_id UUID := gen_random_uuid();
   v_tt1_id   UUID := gen_random_uuid();
   v_tt2_id   UUID := gen_random_uuid();
