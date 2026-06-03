@@ -68,6 +68,16 @@ export interface Ticket {
   event?: Event
 }
 
+// ── connected_accounts ───────────────────────────────────────
+export interface ConnectedAccount {
+  id: string
+  user_id: string
+  stripe_account_id?: string
+  onboarding_complete: boolean
+  created_at: string
+  updated_at: string
+}
+
 // ── payments ─────────────────────────────────────────────────
 export interface Payment {
   id: string
@@ -75,6 +85,7 @@ export interface Payment {
   ticket_type_id: string
   stripe_session_id: string
   stripe_payment_intent_id?: string
+  stripe_account_id?: string     // connected account that processed the payment
   amount: number          // JPY
   quantity: number
   status: PaymentStatus
@@ -118,6 +129,11 @@ export interface Database {
         Row: Ticket
         Insert: Omit<Ticket, 'id' | 'created_at' | 'updated_at'>
         Update: Partial<Omit<Ticket, 'id' | 'created_at'>>
+      }
+      connected_accounts: {
+        Row: ConnectedAccount
+        Insert: Omit<ConnectedAccount, 'id' | 'created_at' | 'updated_at'>
+        Update: Partial<Omit<ConnectedAccount, 'id' | 'created_at'>>
       }
       payments: {
         Row: Payment
