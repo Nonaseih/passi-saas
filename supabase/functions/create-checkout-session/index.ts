@@ -2,8 +2,10 @@ import Stripe from 'https://esm.sh/stripe@14.21.0?target=deno'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { corsHeaders } from '../_shared/cors.ts'
 
+// PassI platform fee: 0.9% (Stripe's 3.6% paid separately by operator = 4.5% total)
+const PLATFORM_FEE_RATE = 0.009
+
 Deno.serve(async (req) => {
-  // Handle CORS preflight
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
   }
@@ -18,21 +20,19 @@ Deno.serve(async (req) => {
       )
     }
 
-    // Init Supabase with service role (bypasses RLS)
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL')!,
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
     )
 
-    // Init Stripe
     const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY')!, {
       apiVersion: '2024-06-20',
     })
 
-    // Fetch ticket type + verify stock
+    // ── Fetch ticket type + event (need created_by for Connect routing) ──
     const { data: ticketType, error: ttError } = await supabase
       .from('ticket_types')
-      .select('*, events(title)')
+      .select('*, events(id, title, created_by)')
       .eq('id', ticket_type_id)
       .single()
 
@@ -50,49 +50,87 @@ Deno.serve(async (req) => {
       )
     }
 
-    // Create Stripe Checkout Session
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      mode: 'payment',
-      line_items: [
-        {
-          price_data: {
-            currency: 'jpy',
-            product_data: {
-              name: ticketType.name,
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              description: `${(ticketType as any).events?.title ?? ''} — ${ticketType.name}`,
-            },
-            unit_amount: ticketType.price,
-          },
-          quantity,
-        },
-      ],
-      success_url: `${Deno.env.get('APP_URL')}/tickets?purchase=success`,
-      cancel_url: `${Deno.env.get('APP_URL')}/purchase/${ticket_type_id}?cancelled=true`,
-      metadata: {
-        ticket_type_id,
-        event_id,
-        user_id,
-        quantity: String(quantity),
-      },
-    })
+    // ── Resolve operator's connected Stripe account ───────────
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const operatorUserId = (ticketType as any).events?.created_by
+    let connectedAccountId: string | null = null
 
-    // Record pending payment (idempotency key = stripe session id)
+    if (operatorUserId) {
+      const { data: connected } = await supabase
+        .from('connected_accounts')
+        .select('stripe_account_id, onboarding_complete')
+        .eq('user_id', operatorUserId)
+        .single()
+
+      if (connected?.onboarding_complete && connected.stripe_account_id) {
+        connectedAccountId = connected.stripe_account_id
+      }
+    }
+
+    if (!connectedAccountId) {
+      return new Response(
+        JSON.stringify({ error: 'グループのStripe連携が未完了です。管理者にお問い合わせください。' }),
+        { status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
+    // ── Build checkout session (Direct Charge on connected account) ──
+    const totalAmount = ticketType.price * quantity
+    // JPY has no sub-units — amount is already in yen
+    const applicationFeeAmount = Math.round(totalAmount * PLATFORM_FEE_RATE)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const eventTitle = (ticketType as any).events?.title ?? ''
+
+    const session = await stripe.checkout.sessions.create(
+      {
+        payment_method_types: ['card'],
+        mode: 'payment',
+        line_items: [
+          {
+            price_data: {
+              currency: 'jpy',
+              product_data: {
+                name: ticketType.name,
+                description: `${eventTitle} — ${ticketType.name}`,
+              },
+              unit_amount: ticketType.price,
+            },
+            quantity,
+          },
+        ],
+        payment_intent_data: {
+          application_fee_amount: applicationFeeAmount,
+        },
+        success_url: `${Deno.env.get('APP_URL')}/tickets?purchase=success`,
+        cancel_url:  `${Deno.env.get('APP_URL')}/purchase/${ticket_type_id}?cancelled=true`,
+        metadata: {
+          ticket_type_id,
+          event_id,
+          user_id,
+          quantity: String(quantity),
+          stripe_account_id: connectedAccountId,
+        },
+      },
+      // Direct Charge — session lives on the connected account
+      { stripeAccount: connectedAccountId }
+    )
+
+    // ── Record pending payment ────────────────────────────────
     const { error: paymentError } = await supabase
       .from('payments')
       .insert({
         user_id,
         ticket_type_id,
         stripe_session_id: session.id,
-        amount: ticketType.price * quantity,
+        stripe_account_id: connectedAccountId,
+        amount: totalAmount,
         quantity,
         status: 'pending',
       })
 
     if (paymentError) {
       console.error('Payment insert error:', paymentError)
-      // Don't block — payment record will be upserted on webhook
+      // Non-fatal — webhook will upsert on success
     }
 
     return new Response(
