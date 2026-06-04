@@ -2,7 +2,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { Home, Ticket, History, User } from 'lucide-react'
 
 const TABS = [
-  { icon: Home,    label: 'ホーム',     path: '/' },
+  { icon: Home,    label: 'ホーム',     path: '/home' },
   { icon: Ticket,  label: '特典券',     path: '/tickets' },
   { icon: History, label: '履歴',       path: '/history' },
   { icon: User,    label: 'マイページ', path: '/mypage' },
