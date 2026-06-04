@@ -23,7 +23,7 @@ export function FanRoutes() {
 
       {/* Protected — fan only */}
       <Route element={<ProtectedRoute allowedRoles={['fan']} />}>
-        <Route path="/" element={<FanHome />} />
+        <Route path="/home" element={<FanHome />} />
         <Route path="/tickets" element={<FanTickets />} />
         <Route path="/tickets/:ticketId" element={<FanTicketDetail />} />
         <Route path="/purchase/:ticketTypeId" element={<FanPurchase />} />
