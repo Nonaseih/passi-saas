@@ -21,7 +21,7 @@ function RootRedirect() {
   if (!user) return <Navigate to="/login" replace />
 
   const roleHome = {
-    fan: '/tickets',
+    fan: '/home',
     staff: '/staff',
     admin: '/admin',
   }
