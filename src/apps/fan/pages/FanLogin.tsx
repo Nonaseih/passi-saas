@@ -3,7 +3,7 @@ import { useNavigate, Link, useSearchParams } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 
 export function FanLogin() {
-  const { signIn } = useAuth()
+  const { signIn, user } = useAuth()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const [email, setEmail] = useState('')
@@ -11,6 +11,13 @@ export function FanLogin() {
   const [error, setError] = useState('')
   const [notice, setNotice] = useState('')
   const [loading, setLoading] = useState(false)
+
+  // Navigate only after AuthContext has populated the user profile —
+  // avoids a race condition where ProtectedRoute sees user=null and
+  // bounces back to /login before onAuthStateChange finishes.
+  useEffect(() => {
+    if (user) navigate('/tickets', { replace: true })
+  }, [user, navigate])
 
   useEffect(() => {
     if (searchParams.get('confirmed') === 'true') {
@@ -25,10 +32,9 @@ export function FanLogin() {
     setLoading(true)
     try {
       await signIn(email, password)
-      navigate('/tickets')
+      // Navigation is handled by the useEffect above once user is set.
     } catch (err) {
       setError(err instanceof Error ? err.message : 'ログインに失敗しました')
-    } finally {
       setLoading(false)
     }
   }
