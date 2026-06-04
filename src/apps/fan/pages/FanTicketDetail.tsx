@@ -24,8 +24,8 @@ export function FanTicketDetail() {
   async function handleUse() {
     if (!ticket || marking || ticket.status === 'used') return
     setMarking(true)
-    const { error } = await supabase
-      .from('tickets')
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error } = await (supabase.from('tickets') as any)
       .update({ status: 'used' })
       .eq('id', ticket.id)
     if (error) {
