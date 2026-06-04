@@ -25,7 +25,6 @@ function toDateStr(d: Date) {
 }
 
 export function FanHome() {
-  useAuth() // ensure auth context is available
   const { events, loading } = useEvents()
   const navigate = useNavigate()
   const [search, setSearch] = useState('')
