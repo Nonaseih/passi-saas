@@ -1,14 +1,15 @@
 import { useNavigate } from 'react-router-dom'
 import { usePayments } from '@/hooks/usePayments'
 import { formatDate, formatPrice } from '@/lib/utils'
-import { CalendarDays, Ticket, History, CheckCircle, XCircle, Clock } from 'lucide-react'
 import type { PaymentStatus } from '@/types'
+import { FanLayout } from '../components/FanLayout'
+import { FanTopbar } from '../components/FanTopbar'
 
-const statusConfig: Record<PaymentStatus, { label: string; icon: typeof CheckCircle; className: string }> = {
-  paid: { label: '決済完了', icon: CheckCircle, className: 'text-green-600' },
-  pending: { label: '処理中', icon: Clock, className: 'text-yellow-600' },
-  failed: { label: '決済失敗', icon: XCircle, className: 'text-red-500' },
-  refunded: { label: '返金済み', icon: XCircle, className: 'text-gray-500' },
+const STATUS_LABEL: Record<PaymentStatus, { label: string; chip: string }> = {
+  paid:     { label: '決済完了', chip: 'soft-success' },
+  pending:  { label: '処理中',   chip: 'status-chip--subtle' },
+  failed:   { label: '決済失敗', chip: 'soft-danger' },
+  refunded: { label: '返金済み', chip: 'status-chip--used-soft' },
 }
 
 export function FanHistory() {
@@ -16,88 +17,70 @@ export function FanHistory() {
   const navigate = useNavigate()
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="sticky top-0 z-10 border-b bg-background px-4 py-3">
-        <h1 className="text-lg font-bold text-primary">購入履歴</h1>
-      </header>
+    <FanLayout>
+      <FanTopbar title="購入履歴" />
 
-      <main className="p-4 space-y-3 pb-24">
+      <div className="content">
         {loading ? (
-          <div className="space-y-3">
-            {[...Array(4)].map((_, i) => (
-              <div key={i} className="h-20 rounded-xl bg-muted animate-pulse" />
+          <div className="history-list">
+            {[0, 1, 2, 3].map((i) => (
+              <div key={i} className="fan-skeleton" style={{ height: 64, borderRadius: 16 }} />
             ))}
           </div>
         ) : payments.length === 0 ? (
-          <div className="flex flex-col items-center gap-4 py-16 text-center">
-            <History size={48} className="text-muted-foreground/30" />
-            <div>
-              <p className="font-medium">購入履歴がありません</p>
-              <p className="text-sm text-muted-foreground mt-1">チケットを購入すると履歴が表示されます</p>
-            </div>
-            <button
-              onClick={() => navigate('/')}
-              className="rounded-lg bg-primary px-6 py-2 text-sm font-medium text-primary-foreground"
-            >
-              イベントを見る
-            </button>
-          </div>
+          <EmptyHistory onGoHome={() => navigate('/')} />
         ) : (
-          payments.map((payment) => {
-            const status = statusConfig[payment.status]
-            const StatusIcon = status.icon
-            return (
-              <div key={payment.id} className="rounded-xl border bg-card p-4 shadow-sm">
-                <div className="flex items-start justify-between gap-2">
-                  <div className="flex-1 space-y-1">
-                    <p className="font-semibold text-sm">{payment.ticket_type?.name}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {payment.quantity}枚 × {formatPrice(payment.ticket_type?.price ?? 0)}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {formatDate(payment.created_at)}
-                    </p>
+          <div className="history-list">
+            {payments.map((payment) => {
+              const status = STATUS_LABEL[payment.status]
+              return (
+                <div key={payment.id} className="history-row">
+                  <div className="history-row__date">
+                    {formatDate(payment.created_at).slice(0, 10)}
                   </div>
-                  <div className="flex flex-col items-end gap-1">
-                    <p className="font-bold text-sm">{formatPrice(payment.amount)}</p>
-                    <div className={`flex items-center gap-1 text-xs ${status.className}`}>
-                      <StatusIcon size={12} />
-                      <span>{status.label}</span>
-                    </div>
+                  <div className="history-row__label">
+                    {payment.ticket_type?.name ?? '特典券'}
+                    {payment.quantity > 1 && (
+                      <span style={{ marginLeft: 6, fontSize: 10, color: 'var(--text-3)', fontWeight: 400 }}>
+                        ×{payment.quantity}
+                      </span>
+                    )}
+                  </div>
+                  <div className="history-row__amount" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 4 }}>
+                    <span style={{ fontWeight: 800, fontSize: 13 }}>{formatPrice(payment.amount)}</span>
+                    <span className={`status-chip ${status.chip}`}>{status.label}</span>
                   </div>
                 </div>
-              </div>
-            )
-          })
+              )
+            })}
+          </div>
         )}
-      </main>
 
-      {/* Bottom nav */}
-      <nav className="fixed bottom-0 left-0 right-0 border-t bg-background px-6 py-3">
-        <div className="flex justify-around">
-          <button
-            onClick={() => navigate('/')}
-            className="flex flex-col items-center gap-1 text-muted-foreground hover:text-primary"
-          >
-            <CalendarDays size={20} />
-            <span className="text-[10px]">イベント</span>
-          </button>
-          <button
-            onClick={() => navigate('/tickets')}
-            className="flex flex-col items-center gap-1 text-muted-foreground hover:text-primary"
-          >
-            <Ticket size={20} />
-            <span className="text-[10px]">チケット</span>
-          </button>
-          <button
-            onClick={() => navigate('/history')}
-            className="flex flex-col items-center gap-1 text-primary"
-          >
-            <History size={20} />
-            <span className="text-[10px]">購入履歴</span>
-          </button>
+        <div className="info-block" style={{ marginTop: 24 }}>
+          購入履歴はStripe経由の決済完了後に反映されます。返金・キャンセルはお問い合わせください。
         </div>
-      </nav>
+      </div>
+    </FanLayout>
+  )
+}
+
+function EmptyHistory({ onGoHome }: { onGoHome: () => void }) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, paddingTop: 56, textAlign: 'center' }}>
+      <div style={{ fontSize: 48, opacity: .3 }}>🧾</div>
+      <div>
+        <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)' }}>購入履歴がありません</div>
+        <div style={{ fontSize: 12, color: 'var(--text-2)', marginTop: 4 }}>
+          チケットを購入すると履歴が表示されます
+        </div>
+      </div>
+      <button
+        className="primary-btn"
+        style={{ width: 'auto', padding: '0 28px', height: 44, fontSize: 13 }}
+        onClick={onGoHome}
+      >
+        イベントを見る
+      </button>
     </div>
   )
 }
