@@ -5,7 +5,7 @@ import {
   useState,
   type ReactNode,
 } from 'react'
-import type { Session } from '@supabase/supabase-js'
+import type { Session, User } from '@supabase/supabase-js'
 import { supabase } from '@/lib/supabase'
 import type { AuthUser } from '@/types'
 
@@ -30,7 +30,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session)
-      if (session?.user) fetchUserProfile(session.user.id)
+      if (session?.user) fetchUserProfile(session.user)
       else setLoading(false)
     })
 
@@ -38,26 +38,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       async (event, session) => {
         setSession(session)
         if (session?.user) {
-          // On first signup, insert the profile row before fetching it.
-          // This avoids a race condition where fetchUserProfile runs before
-          // the signUp() caller gets to its own insert.
-          if ((event as string) === 'SIGNED_UP') {
-            const displayName =
-              session.user.user_metadata?.display_name ??
-              session.user.email ??
-              ''
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            await (supabase.from('users') as any).upsert(
-              {
-                id: session.user.id,
-                email: session.user.email ?? '',
-                display_name: displayName,
-                role: 'fan',
-              },
-              { onConflict: 'id' }
-            )
-          }
-          await fetchUserProfile(session.user.id)
+          await fetchUserProfile(session.user)
         } else {
           setUser(null)
           setLoading(false)
@@ -68,11 +49,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => subscription.unsubscribe()
   }, [])
 
-  async function fetchUserProfile(userId: string) {
+  async function fetchUserProfile(authUser: User) {
     const { data, error } = await supabase
       .from('users')
       .select('id, role, display_name, email, avatar_url')
-      .eq('id', userId)
+      .eq('id', authUser.id)
       .single<{
         id: string
         role: import('@/types').UserRole
@@ -89,7 +70,57 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         display_name: data.display_name,
         avatar_url: data.avatar_url ?? undefined,
       })
+      setLoading(false)
+      return
     }
+
+    // Row missing — provision it now (handles cases where the SIGNED_UP
+    // event never fired, or an earlier upsert silently failed).
+    if (error?.code === 'PGRST116' || !data) {
+      console.warn('AuthContext: users row missing, provisioning now')
+      const displayName =
+        authUser.user_metadata?.display_name ??
+        authUser.email ??
+        'Fan'
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { error: insertError } = await (supabase.from('users') as any).insert({
+        id: authUser.id,
+        email: authUser.email ?? '',
+        display_name: displayName,
+        role: 'fan',
+      })
+
+      if (!insertError) {
+        // Fetch the newly created row
+        const { data: retryData } = await supabase
+          .from('users')
+          .select('id, role, display_name, email, avatar_url')
+          .eq('id', authUser.id)
+          .single<{
+            id: string
+            role: import('@/types').UserRole
+            display_name: string
+            email: string
+            avatar_url: string | null
+          }>()
+
+        if (retryData) {
+          setUser({
+            id: retryData.id,
+            email: retryData.email,
+            role: retryData.role,
+            display_name: retryData.display_name,
+            avatar_url: retryData.avatar_url ?? undefined,
+          })
+        }
+      } else {
+        console.error('AuthContext: failed to provision users row', insertError.message)
+      }
+    } else {
+      console.error('AuthContext: fetchUserProfile error', error?.message)
+    }
+
     setLoading(false)
   }
 
@@ -99,8 +130,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   async function signUp(email: string, password: string, displayName: string) {
-    // Profile row is created in onAuthStateChange (SIGNED_UP event) to avoid
-    // a race condition. We only need to trigger the auth signup here.
     const { error } = await supabase.auth.signUp({
       email,
       password,
