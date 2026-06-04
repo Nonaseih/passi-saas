@@ -3,7 +3,7 @@ import { useNavigate, Link, useSearchParams } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 
 export function FanLogin() {
-  const { signIn, user } = useAuth()
+  const { signIn, user, loading: authLoading } = useAuth()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const [email, setEmail] = useState('')
@@ -11,13 +11,22 @@ export function FanLogin() {
   const [error, setError] = useState('')
   const [notice, setNotice] = useState('')
   const [loading, setLoading] = useState(false)
+  const [awaitingAuth, setAwaitingAuth] = useState(false)
 
-  // Navigate only after AuthContext has populated the user profile —
-  // avoids a race condition where ProtectedRoute sees user=null and
-  // bounces back to /login before onAuthStateChange finishes.
+  // Navigate once AuthContext has fully resolved the user profile.
   useEffect(() => {
-    if (user) navigate('/tickets', { replace: true })
-  }, [user, navigate])
+    if (user) {
+      navigate('/tickets', { replace: true })
+      return
+    }
+    // Auth context finished loading but user is still null after we
+    // initiated sign-in → profile fetch failed or row doesn't exist.
+    if (awaitingAuth && !authLoading) {
+      setError('ログインに失敗しました。アカウント情報を確認してください。')
+      setLoading(false)
+      setAwaitingAuth(false)
+    }
+  }, [user, authLoading, awaitingAuth, navigate])
 
   useEffect(() => {
     if (searchParams.get('confirmed') === 'true') {
@@ -30,12 +39,14 @@ export function FanLogin() {
     setError('')
     setNotice('')
     setLoading(true)
+    setAwaitingAuth(true)
     try {
       await signIn(email, password)
-      // Navigation is handled by the useEffect above once user is set.
+      // Navigation handled by useEffect above once user profile is set.
     } catch (err) {
       setError(err instanceof Error ? err.message : 'ログインに失敗しました')
       setLoading(false)
+      setAwaitingAuth(false)
     }
   }
 
