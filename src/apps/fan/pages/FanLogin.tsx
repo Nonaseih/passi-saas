@@ -1,32 +1,15 @@
 import { useState, useEffect } from 'react'
-import { useNavigate, Link, useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams, Navigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 
 export function FanLogin() {
   const { signIn, user, loading: authLoading } = useAuth()
-  const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [notice, setNotice] = useState('')
   const [loading, setLoading] = useState(false)
-  const [awaitingAuth, setAwaitingAuth] = useState(false)
-
-  // Navigate once AuthContext has fully resolved the user profile.
-  useEffect(() => {
-    if (user) {
-      navigate('/tickets', { replace: true })
-      return
-    }
-    // Auth context finished loading but user is still null after we
-    // initiated sign-in → profile fetch failed or row doesn't exist.
-    if (awaitingAuth && !authLoading) {
-      setError('ログインに失敗しました。アカウント情報を確認してください。')
-      setLoading(false)
-      setAwaitingAuth(false)
-    }
-  }, [user, authLoading, awaitingAuth, navigate])
 
   useEffect(() => {
     if (searchParams.get('confirmed') === 'true') {
@@ -34,19 +17,21 @@ export function FanLogin() {
     }
   }, [searchParams])
 
+  // Redirect once AuthContext has a user — render-time redirect avoids
+  // the removeChild crash that useEffect + navigate() causes in StrictMode.
+  if (!authLoading && user) return <Navigate to="/home" replace />
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setError('')
     setNotice('')
     setLoading(true)
-    setAwaitingAuth(true)
     try {
       await signIn(email, password)
-      // Navigation handled by useEffect above once user profile is set.
+      // AuthContext will set user → the Navigate above handles redirect.
     } catch (err) {
       setError(err instanceof Error ? err.message : 'ログインに失敗しました')
       setLoading(false)
-      setAwaitingAuth(false)
     }
   }
 
@@ -73,6 +58,7 @@ export function FanLogin() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+            autoComplete="email"
             className="w-full rounded-lg border px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
           />
           <input
@@ -81,6 +67,7 @@ export function FanLogin() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            autoComplete="current-password"
             className="w-full rounded-lg border px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
           />
           <div className="text-right">
