@@ -3,6 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useTickets } from '@/hooks/useTickets'
 import { formatDate } from '@/lib/utils'
 import { supabase } from '@/lib/supabase'
+import type { QRPayload } from '@/types'
+import { QRDisplay } from '@/components/shared/QRDisplay'
 import '../fan.css'
 import { FanTopbar } from '../components/FanTopbar'
 import { SlideToUse } from '../components/SlideToUse'
@@ -42,8 +44,8 @@ export function FanTicketDetail() {
       <div className="fan-app ticket-detail-screen">
         <div className="fan-screen">
           <FanTopbar title="特典券" centered onBack={() => navigate('/tickets')} />
-          <div className="content" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <div className="fan-skeleton" style={{ width: '100%', height: 200, borderRadius: 26 }} />
+          <div className="content">
+            <div className="fan-skeleton" style={{ width: '100%', height: 200, borderRadius: 26, marginTop: 24 }} />
           </div>
         </div>
       </div>
@@ -70,6 +72,13 @@ export function FanTicketDetail() {
 
   const used = ticket.status === 'used'
 
+  const qrPayload: QRPayload = {
+    ticket_id: ticket.id,
+    qr_token: ticket.qr_token,
+    event_id: ticket.event_id,
+    issued_at: ticket.purchased_at,
+  }
+
   return (
     <div className="fan-app ticket-detail-screen">
       <div className="fan-screen">
@@ -93,11 +102,11 @@ export function FanTicketDetail() {
                   justifyContent: 'center',
                   background: 'linear-gradient(145deg, #fff 0%, #faf7ff 100%)',
                   flexDirection: 'column',
-                  gap: 8,
+                  gap: 6,
                 }}
               >
-                <div style={{ fontSize: 40 }}>🎫</div>
-                <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--primary)', letterSpacing: '.04em' }}>
+                <div style={{ fontSize: 36 }}>🎫</div>
+                <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--primary)', letterSpacing: '.04em' }}>
                   {ticket.ticket_type?.name}
                 </div>
               </div>
@@ -108,13 +117,13 @@ export function FanTicketDetail() {
           <div className="meta-strip">
             <div className="meta-col">
               <div className="meta-col__label">イベント</div>
-              <div className="meta-col__value" style={{ fontSize: 12, lineHeight: 1.4, wordBreak: 'break-all' }}>
+              <div className="meta-col__value" style={{ fontSize: 11, lineHeight: 1.4, wordBreak: 'break-all' }}>
                 {ticket.event?.title ?? '—'}
               </div>
             </div>
             <div className="meta-col">
               <div className="meta-col__label">日時</div>
-              <div className="meta-col__value" style={{ fontSize: 11, lineHeight: 1.4 }}>
+              <div className="meta-col__value" style={{ fontSize: 10, lineHeight: 1.4 }}>
                 {ticket.event?.date ? formatDate(ticket.event.date) : '—'}
               </div>
             </div>
@@ -126,17 +135,46 @@ export function FanTicketDetail() {
             </div>
           </div>
 
+          {/* QR code — shown for unused tickets so staff can scan */}
+          {!used && (
+            <div
+              style={{
+                marginTop: 20,
+                padding: '20px 18px',
+                borderRadius: 26,
+                background: 'rgba(255,255,255,.90)',
+                border: '1px solid rgba(228,221,248,.92)',
+                boxShadow: '0 18px 40px rgba(84,63,152,.10)',
+                backdropFilter: 'blur(16px)',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: 10,
+              }}
+            >
+              <div style={{ fontSize: 10, fontWeight: 600, color: 'var(--text-3)', letterSpacing: '.10em', textTransform: 'uppercase' }}>
+                スタッフにQRコードを提示
+              </div>
+              <QRDisplay payload={qrPayload} size="lg" />
+              <div style={{ fontSize: 10, color: 'var(--text-3)', textAlign: 'center', lineHeight: 1.6 }}>
+                このQRコードをスタッフがスキャンします
+              </div>
+            </div>
+          )}
+
           {/* Slide to use panel */}
-          <div className="ticket-detail-panel">
+          <div className="ticket-detail-panel" style={{ marginTop: used ? 18 : 14 }}>
             <div className="panel__title">
-              {used ? '使用済みです' : '使用する'}
+              {used ? '使用済みです' : '自分で使用済みにする'}
             </div>
             {!used && (
-              <div className="helper-center">この画面をスタッフに提示してください</div>
+              <div className="helper-center">
+                スタッフのスキャンが難しい場合はスライドで操作できます
+              </div>
             )}
             <SlideToUse used={used} onUse={handleUse} />
             <button className="outline-btn outline-btn--ticket" onClick={() => navigate('/tickets')}>
-              キャンセル
+              一覧に戻る
             </button>
           </div>
 
@@ -146,7 +184,6 @@ export function FanTicketDetail() {
           </div>
         </div>
 
-        {/* Toast */}
         {toast && <div className="fan-toast">{toast}</div>}
       </div>
     </div>
