@@ -41,7 +41,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           // On first signup, insert the profile row before fetching it.
           // This avoids a race condition where fetchUserProfile runs before
           // the signUp() caller gets to its own insert.
-          if (event === 'SIGNED_UP') {
+          if ((event as string) === 'SIGNED_UP') {
             const displayName =
               session.user.user_metadata?.display_name ??
               session.user.email ??
