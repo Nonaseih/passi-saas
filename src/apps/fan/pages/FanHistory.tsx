@@ -28,7 +28,7 @@ export function FanHistory() {
             ))}
           </div>
         ) : payments.length === 0 ? (
-          <EmptyHistory onGoHome={() => navigate('/')} />
+          <EmptyHistory onGoHome={() => navigate('/home')} />
         ) : (
           <div className="history-list">
             {payments.map((payment) => {

@@ -15,7 +15,7 @@ export function FanBottomNav() {
   return (
     <nav className="bottom-nav">
       {TABS.map(({ icon: Icon, label, path }) => {
-        const active = path === '/' ? pathname === '/' : pathname.startsWith(path)
+        const active = pathname === path || (path !== '/home' && pathname.startsWith(path))
         return (
           <button
             key={path}

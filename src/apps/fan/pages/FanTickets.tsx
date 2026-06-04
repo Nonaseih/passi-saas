@@ -54,7 +54,7 @@ export function FanTickets() {
             ))}
           </div>
         ) : shown.length === 0 ? (
-          <EmptyState tab={tab} onGoHome={() => navigate('/')} />
+          <EmptyState tab={tab} onGoHome={() => navigate('/home')} />
         ) : (
           <div className="list ticket-list">
             {shown.map((ticket) => (
