@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '@/contexts/AuthContext'
 import { useEvents } from '@/hooks/useEvents'
 import { formatPrice } from '@/lib/utils'
 import { Search, Bell, Ticket, Megaphone } from 'lucide-react'
