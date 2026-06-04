@@ -118,7 +118,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         console.error('AuthContext: failed to provision users row', insertError.message)
       }
     } else {
-      console.error('AuthContext: fetchUserProfile error', error?.message)
+      console.error('AuthContext: fetchUserProfile error', String(error))
     }
 
     setLoading(false)
