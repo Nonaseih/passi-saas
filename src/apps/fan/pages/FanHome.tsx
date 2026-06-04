@@ -2,86 +2,103 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { useEvents } from '@/hooks/useEvents'
 import { formatDate, formatPrice } from '@/lib/utils'
-import { CalendarDays, MapPin, Ticket, History, LogOut } from 'lucide-react'
+import { Bell, Search, CalendarDays, MapPin } from 'lucide-react'
+import { FanLayout } from '../components/FanLayout'
+import { FanTopbar } from '../components/FanTopbar'
 
 export function FanHome() {
-  const { user, signOut } = useAuth()
+  const { user } = useAuth()
   const { events, loading } = useEvents()
   const navigate = useNavigate()
 
-  async function handleSignOut() {
-    await signOut()
-    navigate('/login')
-  }
-
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="sticky top-0 z-10 border-b bg-background px-4 py-3">
-        <div className="flex items-center justify-between">
-          <h1 className="text-lg font-bold text-primary">PassI</h1>
-          <div className="flex items-center gap-3">
-            <span className="text-sm text-muted-foreground">{user?.display_name}</span>
-            <button onClick={handleSignOut} className="text-muted-foreground hover:text-foreground">
-              <LogOut size={18} />
-            </button>
-          </div>
-        </div>
-      </header>
+    <FanLayout>
+      <FanTopbar
+        title="PASSI"
+        right={
+          <button className="icon-btn" aria-label="通知">
+            <Bell size={18} />
+          </button>
+        }
+      />
 
-      <main className="p-4 space-y-6 pb-24">
-        <div>
-          <h2 className="text-base font-semibold mb-3">開催中・近日イベント</h2>
+      <div className="content content--home">
+        {/* Search bar */}
+        <div className="search-input card">
+          <Search size={16} color="var(--text-3)" />
+          <input type="text" placeholder="イベント・グループを検索" readOnly style={{ cursor: 'default' }} />
+        </div>
+
+        {/* Greeting */}
+        {user?.display_name && (
+          <div style={{ marginTop: 14, fontSize: 13, color: 'var(--text-2)', fontWeight: 500 }}>
+            こんにちは、<span style={{ color: 'var(--primary)', fontWeight: 700 }}>{user.display_name}</span> さん
+          </div>
+        )}
+
+        {/* Events section */}
+        <div className="section">
+          <div className="section-head">
+            <div className="section-title">
+              <CalendarDays size={16} />
+              開催中・近日イベント
+            </div>
+          </div>
 
           {loading ? (
-            <div className="space-y-3">
-              {[...Array(3)].map((_, i) => (
-                <div key={i} className="h-36 rounded-xl bg-muted animate-pulse" />
+            <div className="quick-stack">
+              {[0, 1, 2].map((i) => (
+                <div key={i} className="fan-skeleton" style={{ height: 74, borderRadius: 18 }} />
               ))}
             </div>
           ) : events.length === 0 ? (
-            <div className="rounded-xl border border-dashed p-8 text-center">
-              <p className="text-sm text-muted-foreground">現在開催中のイベントはありません</p>
+            <div className="card info-card" style={{ textAlign: 'center', color: 'var(--text-2)', fontSize: 13 }}>
+              現在開催中のイベントはありません
             </div>
           ) : (
-            <div className="space-y-3">
+            <div className="quick-stack">
               {events.map((event) => (
-                <div
-                  key={event.id}
-                  className="rounded-xl border bg-card p-4 space-y-3 shadow-sm"
-                >
-                  <div>
-                    <h3 className="font-semibold">{event.title}</h3>
-                    <div className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
-                      <CalendarDays size={12} />
-                      <span>{formatDate(event.date)}</span>
+                <div key={event.id} className="card quick-card--wide" style={{ pointerEvents: 'auto', cursor: 'default', flexDirection: 'column', alignItems: 'stretch', gap: 0, padding: '12px 14px' }}>
+                  {/* Event header */}
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div className="quick-card__group">{event.title}</div>
+                      <div style={{ display: 'flex', gap: 8, marginTop: 4, flexWrap: 'wrap' }}>
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, fontSize: 9.5, color: 'var(--text-3)' }}>
+                          <CalendarDays size={10} />{formatDate(event.date)}
+                        </span>
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, fontSize: 9.5, color: 'var(--text-3)' }}>
+                          <MapPin size={10} />{event.venue}
+                        </span>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                      <MapPin size={12} />
-                      <span>{event.venue}</span>
-                    </div>
+                    <span className={`status-chip ${event.status === 'ongoing' ? 'soft-success' : 'status-chip--subtle'}`}>
+                      {event.status === 'ongoing' ? '開催中' : '近日開催'}
+                    </span>
                   </div>
 
                   {/* Ticket types */}
                   {event.ticket_types.length > 0 && (
-                    <div className="space-y-2">
+                    <div style={{ marginTop: 10, display: 'flex', flexDirection: 'column', gap: 6 }}>
                       {event.ticket_types.map((tt) => (
-                        <button
+                        <div
                           key={tt.id}
-                          onClick={() => navigate(`/purchase/${tt.id}`)}
-                          disabled={tt.stock_remaining === 0}
-                          className="w-full flex items-center justify-between rounded-lg bg-primary/10 px-3 py-2 text-sm hover:bg-primary/20 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                          style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}
                         >
-                          <span className="font-medium text-primary">{tt.name}</span>
-                          <div className="flex items-center gap-2">
-                            <span className="text-xs text-muted-foreground">
-                              残り{tt.stock_remaining}枚
-                            </span>
-                            <span className="font-bold text-primary">
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <span style={{ fontSize: 11.5, fontWeight: 600, color: 'var(--text-2)' }}>{tt.name}</span>
+                            <span style={{ marginLeft: 8, fontSize: 11, color: 'var(--primary)', fontWeight: 700 }}>
                               {formatPrice(tt.price)}
                             </span>
                           </div>
-                        </button>
+                          <button
+                            className="quick-card__buy-btn"
+                            onClick={() => navigate(`/purchase/${tt.id}`)}
+                            disabled={tt.stock_remaining === 0}
+                          >
+                            {tt.stock_remaining === 0 ? '売切れ' : '購入する'}
+                          </button>
+                        </div>
                       ))}
                     </div>
                   )}
@@ -90,34 +107,34 @@ export function FanHome() {
             </div>
           )}
         </div>
-      </main>
 
-      {/* Bottom nav */}
-      <nav className="fixed bottom-0 left-0 right-0 border-t bg-background px-6 py-3">
-        <div className="flex justify-around">
-          <button
-            onClick={() => navigate('/')}
-            className="flex flex-col items-center gap-1 text-primary"
-          >
-            <CalendarDays size={20} />
-            <span className="text-[10px]">イベント</span>
-          </button>
-          <button
-            onClick={() => navigate('/tickets')}
-            className="flex flex-col items-center gap-1 text-muted-foreground hover:text-primary"
-          >
-            <Ticket size={20} />
-            <span className="text-[10px]">チケット</span>
-          </button>
-          <button
-            onClick={() => navigate('/history')}
-            className="flex flex-col items-center gap-1 text-muted-foreground hover:text-primary"
-          >
-            <History size={20} />
-            <span className="text-[10px]">購入履歴</span>
-          </button>
+        {/* Quick links */}
+        <div className="section">
+          <div className="section-head">
+            <div className="section-title">クイックアクセス</div>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+            <button
+              className="card"
+              onClick={() => navigate('/tickets')}
+              style={{ padding: '16px 14px', textAlign: 'left', border: 'none', cursor: 'pointer', background: 'linear-gradient(135deg, #f5f1ff 0%, #ede8ff 100%)' }}
+            >
+              <div style={{ fontSize: 22, marginBottom: 6 }}>🎫</div>
+              <div style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--text)' }}>特典券を見る</div>
+              <div style={{ fontSize: 10, color: 'var(--text-3)', marginTop: 2 }}>未使用・使用済み</div>
+            </button>
+            <button
+              className="card"
+              onClick={() => navigate('/history')}
+              style={{ padding: '16px 14px', textAlign: 'left', border: 'none', cursor: 'pointer', background: 'linear-gradient(135deg, #fff5fe 0%, #ffe8f9 100%)' }}
+            >
+              <div style={{ fontSize: 22, marginBottom: 6 }}>🧾</div>
+              <div style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--text)' }}>購入履歴</div>
+              <div style={{ fontSize: 10, color: 'var(--text-3)', marginTop: 2 }}>過去の購入を確認</div>
+            </button>
+          </div>
         </div>
-      </nav>
-    </div>
+      </div>
+    </FanLayout>
   )
 }
