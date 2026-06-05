@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useEvents } from '@/hooks/useEvents'
 import { formatPrice } from '@/lib/utils'
-import { Search, Bell, Ticket } from 'lucide-react'
+import { Search, Bell, Ticket, Volume2 } from 'lucide-react'
 import { FanLayout } from '../components/FanLayout'
 import { FanTopbar } from '../components/FanTopbar'
 
