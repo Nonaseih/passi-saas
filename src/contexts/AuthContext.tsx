@@ -134,6 +134,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       console.error('AuthContext: fetchUserProfile threw unexpectedly', e)
       setUser(null)
     } finally {
+      clearTimeout(timer)
       setLoading(false)
     }
   }
