@@ -11,6 +11,7 @@ import { FanTicketDetail } from '@/apps/fan/pages/FanTicketDetail'
 import { FanPurchase } from '@/apps/fan/pages/FanPurchase'
 import { FanHistory } from '@/apps/fan/pages/FanHistory'
 import { FanMyPage } from '@/apps/fan/pages/FanMyPage'
+import { FanNotifications } from '@/apps/fan/pages/FanNotifications'
 
 export function FanRoutes() {
   return (
