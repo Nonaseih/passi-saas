@@ -37,13 +37,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       await supabase.auth.signOut()
     }, 8000)
 
-    // onAuthStateChange fires INITIAL_SESSION on mount — no need for getSession()
+    // onAuthStateChange fires INITIAL_SESSION on mount — no need for getSession().
+    // Supabase v2 awaits async callbacks before resolving signInWithPassword, so
+    // we keep this callback synchronous and let fetchUserProfile run in the background.
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (_event, session) => {
+      (_event, session) => {
         clearTimeout(failsafe)
         setSession(session)
         if (session?.user) {
-          await fetchUserProfile(session.user)
+          fetchUserProfile(session.user)
         } else {
           setUser(null)
           setLoading(false)
