@@ -342,7 +342,7 @@ export function FanHome() {
               <section className="section section--home-tight">
                 <div className="section-head section-head--soft">
                   <div className="section-title section-title--soft">
-                    <Bell size={14} /> お知らせ
+                    <Volume2 size={14} /> お知らせ
                   </div>
                   <span className="link-inline link-inline--soft">すべて見る</span>
                 </div>
