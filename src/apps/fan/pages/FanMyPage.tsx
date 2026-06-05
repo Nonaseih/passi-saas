@@ -25,7 +25,15 @@ export function FanMyPage() {
 
   return (
     <FanLayout>
-      <FanTopbar title="マイページ" />
+      <FanTopbar
+        title="マイページ"
+        right={
+          <button className="icon-btn" onClick={() => navigate('/notifications')} aria-label="お知らせ">
+            <Bell size={18} />
+            <span className="badge-dot" />
+          </button>
+        }
+      />
 
       <div className="content">
         <section className="card profile-card">
