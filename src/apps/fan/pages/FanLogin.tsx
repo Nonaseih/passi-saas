@@ -31,6 +31,7 @@ export function FanLogin() {
       // AuthContext will set user → the Navigate above handles redirect.
     } catch (err) {
       setError(err instanceof Error ? err.message : 'ログインに失敗しました')
+    } finally {
       setLoading(false)
     }
   }
