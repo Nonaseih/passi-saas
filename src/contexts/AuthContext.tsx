@@ -45,78 +45,81 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   async function fetchUserProfile(authUser: User) {
-    const { data, error } = await supabase
-      .from('users')
-      .select('id, role, display_name, email, avatar_url')
-      .eq('id', authUser.id)
-      .single<{
-        id: string
-        role: import('@/types').UserRole
-        display_name: string
-        email: string
-        avatar_url: string | null
-      }>()
+    try {
+      const { data, error } = await supabase
+        .from('users')
+        .select('id, role, display_name, email, avatar_url')
+        .eq('id', authUser.id)
+        .single<{
+          id: string
+          role: import('@/types').UserRole
+          display_name: string
+          email: string
+          avatar_url: string | null
+        }>()
 
-    if (!error && data) {
-      setUser({
-        id: data.id,
-        email: data.email,
-        role: data.role,
-        display_name: data.display_name,
-        avatar_url: data.avatar_url ?? undefined,
-      })
-      setLoading(false)
-      return
-    }
+      if (!error && data) {
+        setUser({
+          id: data.id,
+          email: data.email,
+          role: data.role,
+          display_name: data.display_name,
+          avatar_url: data.avatar_url ?? undefined,
+        })
+        return
+      }
 
-    // Row missing — provision it now (handles cases where the SIGNED_UP
-    // event never fired, or an earlier upsert silently failed).
-    if (error?.code === 'PGRST116' || !data) {
-      console.warn('AuthContext: users row missing, provisioning now')
-      const displayName =
-        authUser.user_metadata?.display_name ??
-        authUser.email ??
-        'Fan'
+      // Row missing — provision it now (handles cases where the SIGNED_UP
+      // event never fired, or an earlier upsert silently failed).
+      if (error?.code === 'PGRST116' || !data) {
+        console.warn('AuthContext: users row missing, provisioning now')
+        const displayName =
+          authUser.user_metadata?.display_name ??
+          authUser.email ??
+          'Fan'
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { error: insertError } = await (supabase.from('users') as any).insert({
-        id: authUser.id,
-        email: authUser.email ?? '',
-        display_name: displayName,
-        role: 'fan',
-      })
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const { error: insertError } = await (supabase.from('users') as any).insert({
+          id: authUser.id,
+          email: authUser.email ?? '',
+          display_name: displayName,
+          role: 'fan',
+        })
 
-      if (!insertError) {
-        // Fetch the newly created row
-        const { data: retryData } = await supabase
-          .from('users')
-          .select('id, role, display_name, email, avatar_url')
-          .eq('id', authUser.id)
-          .single<{
-            id: string
-            role: import('@/types').UserRole
-            display_name: string
-            email: string
-            avatar_url: string | null
-          }>()
+        if (!insertError) {
+          const { data: retryData } = await supabase
+            .from('users')
+            .select('id, role, display_name, email, avatar_url')
+            .eq('id', authUser.id)
+            .single<{
+              id: string
+              role: import('@/types').UserRole
+              display_name: string
+              email: string
+              avatar_url: string | null
+            }>()
 
-        if (retryData) {
-          setUser({
-            id: retryData.id,
-            email: retryData.email,
-            role: retryData.role,
-            display_name: retryData.display_name,
-            avatar_url: retryData.avatar_url ?? undefined,
-          })
+          if (retryData) {
+            setUser({
+              id: retryData.id,
+              email: retryData.email,
+              role: retryData.role,
+              display_name: retryData.display_name,
+              avatar_url: retryData.avatar_url ?? undefined,
+            })
+          }
+        } else {
+          console.error('AuthContext: failed to provision users row', insertError.message)
         }
       } else {
-        console.error('AuthContext: failed to provision users row', insertError.message)
+        console.error('AuthContext: fetchUserProfile error', String(error))
       }
-    } else {
-      console.error('AuthContext: fetchUserProfile error', String(error))
+    } catch (e) {
+      console.error('AuthContext: fetchUserProfile threw unexpectedly', e)
+      setUser(null)
+    } finally {
+      setLoading(false)
     }
-
-    setLoading(false)
   }
 
   async function signIn(email: string, password: string) {
