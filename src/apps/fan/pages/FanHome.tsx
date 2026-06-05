@@ -358,7 +358,7 @@ export function FanHome() {
                   </button>
                   <button className="notice-card">
                     <div className="notice-card__left">
-                      <span className="notice-card__icon"><Bell size={18} /></span>
+                      <span className="notice-card__icon"><Volume2 size={18} /></span>
                     </div>
                     <div className="notice-card__body">
                       <div className="notice-card__title">アプリ先行ポイントアップ開催中</div>
