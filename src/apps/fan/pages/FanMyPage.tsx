@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
-import { User, LogOut, Share2 } from 'lucide-react'
+import { User, LogOut, Share2, Bell } from 'lucide-react'
 import { FanLayout } from '../components/FanLayout'
 import { FanTopbar } from '../components/FanTopbar'
 
