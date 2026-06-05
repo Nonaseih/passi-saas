@@ -58,11 +58,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   async function fetchUserProfile(authUser: User) {
+    const controller = new AbortController()
+    const timer = setTimeout(() => controller.abort(), 7000)
     try {
       const { data, error } = await supabase
         .from('users')
         .select('id, role, display_name, email, avatar_url')
         .eq('id', authUser.id)
+        .abortSignal(controller.signal)
         .single<{
           id: string
           role: import('@/types').UserRole
