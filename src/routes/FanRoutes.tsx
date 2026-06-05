@@ -30,6 +30,7 @@ export function FanRoutes() {
         <Route path="/purchase/:ticketTypeId" element={<FanPurchase />} />
         <Route path="/history" element={<FanHistory />} />
         <Route path="/mypage" element={<FanMyPage />} />
+        <Route path="/notifications" element={<FanNotifications />} />
       </Route>
     </Routes>
   )
