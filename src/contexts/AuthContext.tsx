@@ -28,9 +28,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    // Safety net: if auth hasn't resolved in 8 s (e.g. Supabase project paused),
+    // clear the stale session so the app doesn't spin forever.
+    const failsafe = setTimeout(async () => {
+      setUser(null)
+      setSession(null)
+      setLoading(false)
+      await supabase.auth.signOut()
+    }, 8000)
+
     // onAuthStateChange fires INITIAL_SESSION on mount — no need for getSession()
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (_event, session) => {
+        clearTimeout(failsafe)
         setSession(session)
         if (session?.user) {
           await fetchUserProfile(session.user)
@@ -41,7 +51,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     )
 
-    return () => subscription.unsubscribe()
+    return () => {
+      clearTimeout(failsafe)
+      subscription.unsubscribe()
+    }
   }, [])
 
   async function fetchUserProfile(authUser: User) {
