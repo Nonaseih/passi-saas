@@ -437,7 +437,11 @@
 .stepper button {
   width: 42px; height: 42px; border: none; border-radius: 14px;
   background: #ece5ff; color: var(--primary); font-size: 24px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .15s, opacity .15s;
 }
+.stepper button:hover:not(:disabled) { background: #ddd4ff; }
+.stepper button:active:not(:disabled) { background: #c9baff; }
 .stepper__value { font-size: 32px; font-weight: 800; display: flex; align-items: flex-end; gap: 6px; }
 .stepper__unit { font-size: 16px; margin-bottom: 4px; }
 .helper-center { text-align: center; font-size: 12px; color: var(--text-2); margin-top: 10px; }
