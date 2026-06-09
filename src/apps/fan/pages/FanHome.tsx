@@ -1,27 +1,30 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useEvents } from '@/hooks/useEvents'
 import { formatPrice } from '@/lib/utils'
-import { Search, Bell, Ticket, Volume2 } from 'lucide-react'
+import { Search, Bell, Ticket, Volume2, QrCode, CalendarDays } from 'lucide-react'
 import { FanLayout } from '../components/FanLayout'
 import { FanTopbar } from '../components/FanTopbar'
 
-type Filter = 'selling' | 'today' | 'tomorrow' | null
+type Filter = 'selling' | 'today' | 'tomorrow' | 'date' | null
 
 function formatCountdown(target: Date): string {
   const diff = target.getTime() - Date.now()
   if (diff <= 0) return '開催中'
-  const h = Math.floor(diff / 3600000)
-  const m = Math.floor((diff % 3600000) / 60000)
-  if (h >= 24) {
-    const d = Math.floor(h / 24)
-    return `${d}日`
-  }
-  return `${h}:${String(m).padStart(2, '0')}`
+  const totalSec = Math.floor(diff / 1000)
+  const h = Math.floor(totalSec / 3600)
+  const m = Math.floor((totalSec % 3600) / 60)
+  const s = totalSec % 60
+  if (h >= 24) return `${Math.floor(h / 24)}日`
+  return `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`
 }
 
 function toDateStr(d: Date) {
   return `${d.getFullYear()}/${String(d.getMonth() + 1).padStart(2, '0')}/${String(d.getDate()).padStart(2, '0')}`
+}
+
+function toInputDate(d: Date) {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
 }
 
 export function FanHome() {
@@ -29,11 +32,13 @@ export function FanHome() {
   const navigate = useNavigate()
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState<Filter>(null)
+  const [dateValue, setDateValue] = useState('')
   const [now, setNow] = useState(new Date())
+  const dateInputRef = useRef<HTMLInputElement>(null)
 
-  // Tick countdown every minute
+  // Tick every second for the countdown
   useEffect(() => {
-    const id = setInterval(() => setNow(new Date()), 60000)
+    const id = setInterval(() => setNow(new Date()), 1000)
     return () => clearInterval(id)
   }, [])
 
