@@ -238,6 +238,23 @@ export function FanHome() {
               </button>
             </div>
           )}
+          {filter === 'date' && calendarOpen && (
+            <CalendarCard
+              year={calYear}
+              month={calMonth}
+              selected={dateValue}
+              eventDates={eventDateSet}
+              onPrev={() => {
+                if (calMonth === 0) { setCalYear(y => y - 1); setCalMonth(11) }
+                else setCalMonth(m => m - 1)
+              }}
+              onNext={() => {
+                if (calMonth === 11) { setCalYear(y => y + 1); setCalMonth(0) }
+                else setCalMonth(m => m + 1)
+              }}
+              onSelect={d => { setDateValue(d); setCalendarOpen(false) }}
+            />
+          )}
         </section>
 
         {/* Search results */}
