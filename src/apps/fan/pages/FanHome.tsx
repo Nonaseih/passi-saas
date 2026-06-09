@@ -217,27 +217,25 @@ export function FanHome() {
                   {label}
                 </button>
               ))}
-              {/* 日付指定 chip — opens a hidden date input */}
               <button
                 className={`home-filter-chip${filter === 'date' ? ' active' : ''}`}
                 onClick={() => {
-                  if (filter === 'date') { setFilter(null); setDateValue('') }
-                  else dateInputRef.current?.showPicker()
+                  if (filter !== 'date') {
+                    setFilter('date')
+                    setDateValue('')
+                    setCalendarOpen(true)
+                    setCalYear(now.getFullYear())
+                    setCalMonth(now.getMonth())
+                  } else {
+                    setCalendarOpen(o => !o)
+                  }
                 }}
               >
                 <CalendarDays size={11} />
                 {filter === 'date' && dateValue
-                  ? new Date(dateValue).toLocaleDateString('ja-JP', { month: 'numeric', day: 'numeric' })
+                  ? `${parseInt(dateValue.split('/')[1])}/${parseInt(dateValue.split('/')[2])}`
                   : '日付指定'}
               </button>
-              <input
-                ref={dateInputRef}
-                type="date"
-                value={dateValue}
-                min={toInputDate(now)}
-                style={{ position: 'absolute', opacity: 0, pointerEvents: 'none', width: 0, height: 0 }}
-                onChange={e => { setDateValue(e.target.value); setFilter('date') }}
-              />
             </div>
           )}
         </section>
