@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useEvents } from '@/hooks/useEvents'
 import { formatPrice } from '@/lib/utils'
