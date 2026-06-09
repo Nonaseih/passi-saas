@@ -334,7 +334,7 @@ export function FanHome() {
                     該当するイベントが見つかりませんでした
                   </div>
                 )}
-                <button className="filter-back-btn" onClick={() => { setFilter(null); setDateValue('') }}>
+                <button className="filter-back-btn" onClick={() => { setFilter(null); setDateValue(''); setCalendarOpen(false) }}>
                   ← ホームに戻る
                 </button>
               </section>
