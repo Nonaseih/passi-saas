@@ -5,6 +5,7 @@ import { formatPrice } from '@/lib/utils'
 import { Search, Bell, Ticket, Volume2, QrCode, CalendarDays } from 'lucide-react'
 import { FanLayout } from '../components/FanLayout'
 import { FanTopbar } from '../components/FanTopbar'
+import passLogo from '@/public/logo.png'
 
 type Filter = 'selling' | 'today' | 'tomorrow' | 'date' | null
 
