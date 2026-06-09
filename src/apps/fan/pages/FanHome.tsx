@@ -227,7 +227,11 @@ export function FanHome() {
                 <div className="section-head section-head--soft">
                   <div className="section-title section-title--soft">
                     <Search size={14} />
-                    {filter === 'selling' ? '販売中のイベント' : filter === 'today' ? `今日 (${todayStr}) のイベント` : `明日 (${tomorrowStr}) のイベント`}
+                    {filter === 'selling' ? '販売中のイベント'
+                      : filter === 'today' ? `今日 (${todayStr}) のイベント`
+                      : filter === 'tomorrow' ? `明日 (${tomorrowStr}) のイベント`
+                      : dateValue ? `${new Date(dateValue).toLocaleDateString('ja-JP', { month: 'numeric', day: 'numeric' })} のイベント`
+                      : '日付指定'}
                   </div>
                   <span style={{ fontSize: '10.5px', color: 'var(--text-3)' }}>{filteredEvents.length}件</span>
                 </div>
