@@ -96,6 +96,12 @@ export function FanHome() {
     return () => clearInterval(id)
   }, [])
 
+  const eventDateSet = useMemo(() => {
+    const s = new Set<string>()
+    events.forEach(e => s.add(toDateStr(new Date(e.date))))
+    return s
+  }, [events])
+
   const todayStr    = toDateStr(now)
   const tomorrow    = new Date(now); tomorrow.setDate(tomorrow.getDate() + 1)
   const tomorrowStr = toDateStr(tomorrow)
