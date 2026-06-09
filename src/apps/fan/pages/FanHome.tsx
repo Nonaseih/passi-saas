@@ -64,6 +64,9 @@ export function FanHome() {
       const t = new Date(d); t.setDate(t.getDate() + 1)
       return events.filter(e => new Date(e.date).toDateString() === t.toDateString())
     }
+    if (filter === 'date' && dateValue) {
+      return events.filter(e => new Date(e.date).toDateString() === new Date(dateValue).toDateString())
+    }
     return events
   })()
 
