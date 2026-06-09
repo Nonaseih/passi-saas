@@ -24,8 +24,59 @@ function toDateStr(d: Date) {
   return `${d.getFullYear()}/${String(d.getMonth() + 1).padStart(2, '0')}/${String(d.getDate()).padStart(2, '0')}`
 }
 
-function toInputDate(d: Date) {
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+function CalendarCard({
+  year, month, selected, eventDates, onPrev, onNext, onSelect,
+}: {
+  year: number
+  month: number
+  selected: string
+  eventDates: Set<string>
+  onPrev: () => void
+  onNext: () => void
+  onSelect: (date: string) => void
+}) {
+  const today = new Date()
+  const daysInMonth = new Date(year, month + 1, 0).getDate()
+  const firstDow = new Date(year, month, 1).getDay()
+  const monthNames = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月']
+  const dayLabels = ['日','月','火','水','木','金','土']
+  const cells: (number | null)[] = []
+  for (let i = 0; i < firstDow; i++) cells.push(null)
+  for (let d = 1; d <= daysInMonth; d++) cells.push(d)
+
+  return (
+    <div className="home-calendar-card">
+      <div className="cal-nav">
+        <button className="cal-nav-btn" onClick={onPrev}>‹</button>
+        <span className="cal-nav-label">{year}年 {monthNames[month]}</span>
+        <button className="cal-nav-btn" onClick={onNext}>›</button>
+      </div>
+      <div className="cal-day-labels">
+        {dayLabels.map((d, i) => (
+          <div key={d} className={`cal-day-label${i === 0 ? ' sun' : i === 6 ? ' sat' : ''}`}>{d}</div>
+        ))}
+      </div>
+      <div className="cal-grid">
+        {cells.map((d, i) => {
+          if (d === null) return <div key={`e${i}`} className="cal-cell cal-empty" />
+          const dateStr = `${year}/${String(month + 1).padStart(2, '0')}/${String(d).padStart(2, '0')}`
+          const isSelected = selected === dateStr
+          const isToday = year === today.getFullYear() && month === today.getMonth() && d === today.getDate()
+          const hasEvent = eventDates.has(dateStr)
+          return (
+            <button
+              key={d}
+              className={`cal-cell${isSelected ? ' selected' : ''}${isToday ? ' today' : ''}${hasEvent ? ' has-event' : ''}`}
+              onClick={() => onSelect(dateStr)}
+            >
+              {d}
+              {hasEvent && <span className="cal-dot" />}
+            </button>
+          )
+        })}
+      </div>
+    </div>
+  )
 }
 
 export function FanHome() {
