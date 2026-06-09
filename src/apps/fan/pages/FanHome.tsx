@@ -142,7 +142,7 @@ export function FanHome() {
   return (
     <FanLayout>
       <FanTopbar
-        title={<img src={passLogo} alt="PASSi" style={{ height: 22, objectFit: 'contain' }} />}
+        title={<img src={passLogo} alt="PASSi" style={{ height: 32, objectFit: 'contain' }} />}
         right={
           <button className="icon-btn" aria-label="通知">
             <Bell size={18} />
