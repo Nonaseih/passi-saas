@@ -127,16 +127,20 @@ export function FanHome() {
         {/* Search bar + filter chips */}
         <section className="section section--home-tight">
           <div className="search-input card">
-            <Search size={15} color="var(--text-3)" />
+            <Search size={15} color="var(--text-2)" />
             <input
               type="text"
               placeholder="グループ名・イベント名を検索"
               value={search}
               onChange={e => setSearch(e.target.value)}
+              style={{ color: 'var(--text)', caretColor: 'var(--primary)' }}
             />
-            {search && (
-              <button className="search-clear-btn" onClick={() => setSearch('')}>×</button>
-            )}
+            {search
+              ? <button className="search-clear-btn" onClick={() => setSearch('')}>×</button>
+              : <button className="search-qr-btn" aria-label="QRコードを読み取る" onClick={() => {}}>
+                  <QrCode size={18} />
+                </button>
+            }
           </div>
           {!isSearching && (
             <div className="home-filter-row">
@@ -153,6 +157,27 @@ export function FanHome() {
                   {label}
                 </button>
               ))}
+              {/* 日付指定 chip — opens a hidden date input */}
+              <button
+                className={`home-filter-chip${filter === 'date' ? ' active' : ''}`}
+                onClick={() => {
+                  if (filter === 'date') { setFilter(null); setDateValue('') }
+                  else dateInputRef.current?.showPicker()
+                }}
+              >
+                <CalendarDays size={11} />
+                {filter === 'date' && dateValue
+                  ? new Date(dateValue).toLocaleDateString('ja-JP', { month: 'numeric', day: 'numeric' })
+                  : '日付指定'}
+              </button>
+              <input
+                ref={dateInputRef}
+                type="date"
+                value={dateValue}
+                min={toInputDate(now)}
+                style={{ position: 'absolute', opacity: 0, pointerEvents: 'none', width: 0, height: 0 }}
+                onChange={e => { setDateValue(e.target.value); setFilter('date') }}
+              />
             </div>
           )}
         </section>
