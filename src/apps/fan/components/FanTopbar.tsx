@@ -1,7 +1,7 @@
 import { ChevronLeft } from 'lucide-react'
 
 interface Props {
-  title: string
+  title: React.ReactNode
   centered?: boolean
   onBack?: () => void
   right?: React.ReactNode
