@@ -125,7 +125,7 @@ export function FanHome() {
       return events.filter(e => new Date(e.date).toDateString() === t.toDateString())
     }
     if (filter === 'date' && dateValue) {
-      return events.filter(e => new Date(e.date).toDateString() === new Date(dateValue).toDateString())
+      return events.filter(e => toDateStr(new Date(e.date)) === dateValue)
     }
     return events
   })()
