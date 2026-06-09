@@ -305,7 +305,7 @@ export function FanHome() {
                     {filter === 'selling' ? '販売中のイベント'
                       : filter === 'today' ? `今日 (${todayStr}) のイベント`
                       : filter === 'tomorrow' ? `明日 (${tomorrowStr}) のイベント`
-                      : dateValue ? `${new Date(dateValue).toLocaleDateString('ja-JP', { month: 'numeric', day: 'numeric' })} のイベント`
+                      : dateValue ? `${parseInt(dateValue.split('/')[1])}月${parseInt(dateValue.split('/')[2])}日 のイベント`
                       : '日付指定'}
                   </div>
                   <span style={{ fontSize: '10.5px', color: 'var(--text-3)' }}>{filteredEvents.length}件</span>
