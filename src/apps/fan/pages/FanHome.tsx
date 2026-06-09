@@ -84,9 +84,11 @@ export function FanHome() {
   const navigate = useNavigate()
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState<Filter>(null)
-  const [dateValue, setDateValue] = useState('')
+  const [dateValue, setDateValue] = useState('')  // YYYY/MM/DD
+  const [calendarOpen, setCalendarOpen] = useState(false)
+  const [calYear, setCalYear] = useState(() => new Date().getFullYear())
+  const [calMonth, setCalMonth] = useState(() => new Date().getMonth())
   const [now, setNow] = useState(new Date())
-  const dateInputRef = useRef<HTMLInputElement>(null)
 
   // Tick every second for the countdown
   useEffect(() => {
