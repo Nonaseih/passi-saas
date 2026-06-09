@@ -343,6 +343,7 @@
   padding: 0 16px; box-shadow: var(--shadow-sm);
 }
 .search-input input, .text-input input { border: none; outline: none; background: transparent; width: 100%; color: var(--text); }
+.search-input input::placeholder, .text-input input::placeholder { color: var(--text-2); }
 .search-clear-btn { border: none; background: none; color: var(--text-3); font-size: 18px; font-weight: 700; cursor: pointer; padding: 0 2px; line-height: 1; flex: 0 0 auto; }
 .filter-row { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
 .filter-row::-webkit-scrollbar { display: none; }
