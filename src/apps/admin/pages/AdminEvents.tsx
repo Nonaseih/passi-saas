@@ -92,7 +92,8 @@ export function AdminEvents() {
     if (!eventForm.title || !eventForm.date || !eventForm.venue) return
     setEventSaving(true)
     if (eventModal === 'create') {
-      await supabase.from('events').insert({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await (supabase.from('events') as any).insert({
         title: eventForm.title,
         description: eventForm.description || null,
         date: eventForm.date,
@@ -101,7 +102,8 @@ export function AdminEvents() {
         created_by: user!.id,
       })
     } else if (editingEvent) {
-      await supabase.from('events').update({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await (supabase.from('events') as any).update({
         title: eventForm.title,
         description: eventForm.description || null,
         date: eventForm.date,
