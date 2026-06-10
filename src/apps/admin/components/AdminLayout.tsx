@@ -114,23 +114,6 @@ export function AdminLayout() {
 
         {/* Bottom */}
         <div className="px-3 py-4 space-y-0.5" style={{ borderTop: '1px solid #ebe8f6' }}>
-          <NavLink
-            to="/admin/settings"
-            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all"
-            style={({ isActive }) =>
-              isActive
-                ? {
-                    background: 'linear-gradient(135deg, rgba(156,124,242,.13) 0%, rgba(133,127,255,.08) 100%)',
-                    border: '1.5px solid rgba(156,124,242,.20)',
-                    color: '#9c7cf2',
-                    fontWeight: 700,
-                  }
-                : { color: '#b0aac8', border: '1.5px solid transparent' }
-            }
-          >
-            <Settings className="w-4 h-4" />
-            設定
-          </NavLink>
           <button
             onClick={() => signOut()}
             className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all"
