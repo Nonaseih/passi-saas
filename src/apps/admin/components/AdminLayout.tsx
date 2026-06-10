@@ -1,7 +1,6 @@
 import { NavLink, Outlet } from 'react-router-dom'
 import {
-  LayoutDashboard, Calendar, TrendingUp, Users,
-  Settings, LogOut,
+  LayoutDashboard, Calendar, TrendingUp, Users, LogOut,
 } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import logoUrl from '@/public/logo.png'
