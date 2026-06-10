@@ -153,9 +153,11 @@ export function AdminEvents() {
     setTicketSaving(true)
     const price = parseInt(ticketForm.price)
     const stock = parseInt(ticketForm.stock)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const ttTable = supabase.from('ticket_types') as any
     if (editingTicket) {
       const soldCount = editingTicket.stock - editingTicket.stock_remaining
-      await supabase.from('ticket_types').update({
+      await ttTable.update({
         name: ticketForm.name,
         description: ticketForm.description || null,
         price,
@@ -163,7 +165,7 @@ export function AdminEvents() {
         stock_remaining: Math.max(0, stock - soldCount),
       }).eq('id', editingTicket.id)
     } else {
-      await supabase.from('ticket_types').insert({
+      await ttTable.insert({
         event_id: ticketModal.id,
         name: ticketForm.name,
         description: ticketForm.description || null,
