@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
 import { ProtectedRoute } from '@/components/shared/ProtectedRoute'
+import { AdminLayout } from '@/apps/admin/components/AdminLayout'
 
 import { AdminLogin } from '@/apps/admin/pages/AdminLogin'
 import { AdminDashboard } from '@/apps/admin/pages/AdminDashboard'
@@ -12,17 +13,17 @@ import { AdminStaff } from '@/apps/admin/pages/AdminStaff'
 export function AdminRoutes() {
   return (
     <Routes>
-      {/* Public */}
       <Route path="/admin/login" element={<AdminLogin />} />
 
-      {/* Protected — admin only */}
       <Route element={<ProtectedRoute allowedRoles={['admin']} redirectTo="/admin/login" />}>
-        <Route path="/admin" element={<AdminDashboard />} />
-        <Route path="/admin/events" element={<AdminEvents />} />
-        <Route path="/admin/tickets" element={<AdminTickets />} />
-        <Route path="/admin/users" element={<AdminUsers />} />
-        <Route path="/admin/sales" element={<AdminSales />} />
-        <Route path="/admin/staff" element={<AdminStaff />} />
+        <Route element={<AdminLayout />}>
+          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin/events" element={<AdminEvents />} />
+          <Route path="/admin/tickets" element={<AdminTickets />} />
+          <Route path="/admin/users" element={<AdminUsers />} />
+          <Route path="/admin/sales" element={<AdminSales />} />
+          <Route path="/admin/staff" element={<AdminStaff />} />
+        </Route>
       </Route>
     </Routes>
   )
