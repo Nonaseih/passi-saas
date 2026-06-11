@@ -42,13 +42,6 @@ export function AdminLive() {
         const rev = (pays ?? []).reduce((s: number, p: { amount: number }) => s + p.amount, 0)
         setRevenue(rev)
 
-        // Count scans per ticket type from scan_logs via tickets
-        const { data: scans } = await (supabase as any)
-          .from('scan_logs').select('ticket_id')
-          .gte('scanned_at', new Date().toISOString().slice(0, 10))
-
-        const scanMap = new Map<string, number>()
-        // scan_logs doesn't directly have ticket_type_id, approximate from sold/total ratio
         const stats: TicketStat[] = tts.map(t => ({
           ...t,
           sold: t.stock - t.stock_remaining,
