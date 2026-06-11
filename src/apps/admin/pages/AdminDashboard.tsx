@@ -273,7 +273,7 @@ export function AdminDashboard() {
                 ))
               ) : upcomingEvents.length === 0 ? (
                 <tr><td colSpan={4} className="px-6 py-10 text-center text-sm" style={{ color: '#9892b3' }}>開催予定のイベントはありません</td></tr>
-              ) : upcomingEvents.map((ev, i) => {
+              ) : upcomingEvents.map((ev) => {
                 const proto = toProto(ev.status)
                 const ss = STATUS_STYLES[proto]
                 const dateStr = new Date(ev.date).toLocaleDateString('ja-JP', { month: 'numeric', day: 'numeric' })
