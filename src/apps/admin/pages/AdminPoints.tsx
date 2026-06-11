@@ -6,8 +6,6 @@ const CARD = { background: '#ffffff', borderRadius: 22, border: '1px solid #ebe8
 
 type TabKey = 'card' | 'requests'
 
-type RequestStatus = 'pending' | 'approved' | 'rejected'
-
 interface PaymentRequest {
   id: string
   user_display_name: string | null
