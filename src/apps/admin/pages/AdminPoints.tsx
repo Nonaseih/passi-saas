@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Gift, ChevronDown, Check, Clock, X } from 'lucide-react'
+import { Gift, ChevronDown, Check } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 
 const CARD = { background: '#ffffff', borderRadius: 22, border: '1px solid #ebe8f6', boxShadow: '0 8px 20px rgba(59,42,124,.06)' } as const
