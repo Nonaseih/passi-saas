@@ -1,7 +1,7 @@
 import { NavLink, Outlet } from 'react-router-dom'
 import type { ComponentType } from 'react'
 import {
-  LayoutDashboard, Calendar, TrendingUp, Users, LogOut,
+  LayoutDashboard, Calendar, BarChart3, Users, LogOut, Settings,
 } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import logoUrl from '@/public/logo.png'
@@ -30,7 +30,7 @@ const NAV_SECTIONS: NavSection[] = [
   {
     title: '分析',
     items: [
-      { to: '/admin/sales', label: '売上', icon: TrendingUp },
+      { to: '/admin/sales', label: '売上レポート', icon: BarChart3 },
     ],
   },
 ]
