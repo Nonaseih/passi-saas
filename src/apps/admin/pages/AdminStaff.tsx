@@ -55,11 +55,11 @@ export function AdminStaff() {
     if (!promoteEmail.trim()) return
     setPromoteLoading(true)
     setPromoteError('')
-    const { data, error } = await supabase
-      .from('users')
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data, error } = await (supabase.from('users') as any)
       .select('id, role')
       .eq('email', promoteEmail.trim().toLowerCase())
-      .single()
+      .single() as { data: { id: string; role: string } | null; error: unknown }
     if (error || !data) {
       setPromoteError('このメールアドレスのユーザーが見つかりません')
       setPromoteLoading(false)
