@@ -244,8 +244,8 @@ export function AdminPoints() {
           {/* テーブルヘッダー */}
           <div className="grid px-5 py-2.5"
             style={{ gridTemplateColumns: '1fr 1fr 1fr 80px 120px 100px', gap: '1rem', background: '#faf9ff', borderBottom: '1px solid #f3f1fb' }}>
-            {['ユーザー', 'イベント', '券種', '枚数', '金額', 'ステータス'].map((h, i) => (
-              <div key={i} className="text-[11px] font-bold uppercase tracking-wider" style={{ color: '#9892b3' }}>{h}</div>
+            {['ユーザー', 'イベント', '券種', '枚数', '金額', 'ステータス'].map((h) => (
+              <div key={h} className="text-[11px] font-bold uppercase tracking-wider" style={{ color: '#9892b3' }}>{h}</div>
             ))}
           </div>
 
