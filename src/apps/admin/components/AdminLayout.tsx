@@ -1,11 +1,15 @@
 import { NavLink, Outlet } from 'react-router-dom'
+import type { ComponentType } from 'react'
 import {
   LayoutDashboard, Calendar, TrendingUp, Users, LogOut,
 } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import logoUrl from '@/public/logo.png'
 
-const NAV_SECTIONS = [
+type NavItem = { to: string; label: string; icon: ComponentType<{ className?: string }>; end?: boolean }
+type NavSection = { title?: string; items: NavItem[] }
+
+const NAV_SECTIONS: NavSection[] = [
   {
     items: [
       { to: '/admin', label: 'ダッシュボード', icon: LayoutDashboard, end: true },
