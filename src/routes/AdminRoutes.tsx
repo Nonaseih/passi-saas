@@ -9,6 +9,9 @@ import { AdminTickets } from '@/apps/admin/pages/AdminTickets'
 import { AdminUsers } from '@/apps/admin/pages/AdminUsers'
 import { AdminSales } from '@/apps/admin/pages/AdminSales'
 import { AdminStaff } from '@/apps/admin/pages/AdminStaff'
+import { AdminLive } from '@/apps/admin/pages/AdminLive'
+import { AdminPoints } from '@/apps/admin/pages/AdminPoints'
+import { AdminSettings } from '@/apps/admin/pages/AdminSettings'
 
 export function AdminRoutes() {
   return (
@@ -23,6 +26,9 @@ export function AdminRoutes() {
           <Route path="users" element={<AdminUsers />} />
           <Route path="sales" element={<AdminSales />} />
           <Route path="staff" element={<AdminStaff />} />
+          <Route path="live" element={<AdminLive />} />
+          <Route path="points" element={<AdminPoints />} />
+          <Route path="settings" element={<AdminSettings />} />
         </Route>
       </Route>
     </Routes>
