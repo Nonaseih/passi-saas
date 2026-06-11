@@ -78,7 +78,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }>()
 
       if (!error && data) {
-        console.log('[AuthContext] fetchUserProfile — role from DB:', data.role, '| uid:', authUser.id)
         setUser({
           id: data.id,
           email: data.email,
@@ -88,7 +87,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         })
         return
       }
-      console.warn('[AuthContext] fetchUserProfile — query error or no data:', error?.message, '| uid:', authUser.id)
 
       // Row missing — provision it now (handles cases where the SIGNED_UP
       // event never fired, or an earlier upsert silently failed).
