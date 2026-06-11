@@ -13,16 +13,16 @@ import { AdminStaff } from '@/apps/admin/pages/AdminStaff'
 export function AdminRoutes() {
   return (
     <Routes>
-      <Route path="/admin/login" element={<AdminLogin />} />
+      <Route path="login" element={<AdminLogin />} />
 
       <Route element={<ProtectedRoute allowedRoles={['admin']} redirectTo="/admin/login" />}>
         <Route element={<AdminLayout />}>
-          <Route path="/admin" element={<AdminDashboard />} />
-          <Route path="/admin/events" element={<AdminEvents />} />
-          <Route path="/admin/tickets" element={<AdminTickets />} />
-          <Route path="/admin/users" element={<AdminUsers />} />
-          <Route path="/admin/sales" element={<AdminSales />} />
-          <Route path="/admin/staff" element={<AdminStaff />} />
+          <Route index element={<AdminDashboard />} />
+          <Route path="events" element={<AdminEvents />} />
+          <Route path="tickets" element={<AdminTickets />} />
+          <Route path="users" element={<AdminUsers />} />
+          <Route path="sales" element={<AdminSales />} />
+          <Route path="staff" element={<AdminStaff />} />
         </Route>
       </Route>
     </Routes>
