@@ -594,9 +594,10 @@ export function AdminDashboard() {
                 </button>
               </div>
               <div className="p-4 space-y-2.5">
-                {options.map(({ key, label, desc, icon, danger }) => {
+                {options.map(({ key, label, desc, icon }) => {
                   const isCurrent = currentProto === key
                   const sss = STATUS_STYLES[key]
+                  const isDanger = key === 'completed'
                   return (
                     <button key={key} onClick={() => updateStatus(statusModalId, key)} disabled={isCurrent}
                       className="w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-left transition-all"
@@ -606,7 +607,7 @@ export function AdminDashboard() {
                       <div className="flex-shrink-0">{icon}</div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-0.5">
-                          <span className="text-sm font-bold" style={{ color: danger ? '#f08aa0' : sss.color }}>{label}</span>
+                          <span className="text-sm font-bold" style={{ color: isDanger ? '#f08aa0' : sss.color }}>{label}</span>
                           {isCurrent && <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full" style={{ background: sss.bg, color: sss.color }}>現在</span>}
                         </div>
                         <p className="text-xs font-medium" style={{ color: '#221d4e' }}>{desc}</p>
