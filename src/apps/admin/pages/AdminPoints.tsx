@@ -210,7 +210,7 @@ export function AdminPoints() {
                 <span className="text-white font-bold text-sm opacity-90">PASSi ポイントカード</span>
               </div>
               <div className="flex gap-2 flex-wrap">
-                {steps.map((step, i) => (
+                {steps.map((step) => (
                   <div key={step.id} className="flex flex-col items-center gap-1">
                     <div className="w-10 h-10 rounded-2xl flex items-center justify-center"
                       style={{ background: 'rgba(255,255,255,.25)', backdropFilter: 'blur(4px)', border: '1.5px solid rgba(255,255,255,.4)' }}>
