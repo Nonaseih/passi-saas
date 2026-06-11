@@ -28,12 +28,8 @@ export function AdminLive() {
       if (!ev) { setLoading(false); return }
       setLiveEvent(ev)
 
-      const [ttRes, payRes, scanRes] = await Promise.all([
+      const [ttRes] = await Promise.all([
         supabase.from('ticket_types').select('*').eq('event_id', ev.id),
-        supabase.from('payments').select('amount').eq('status', 'paid')
-          .in('ticket_type_id', []),  // will fix below
-        supabase.from('scan_logs').select('ticket_id, tickets!inner(ticket_type_id)')
-          .gte('scanned_at', new Date().toISOString().slice(0, 10)),
       ])
 
       const tts = (ttRes.data ?? []) as TicketType[]
