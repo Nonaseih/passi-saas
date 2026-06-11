@@ -13,8 +13,6 @@ export function ProtectedRoute({
 }: ProtectedRouteProps) {
   const { user, loading } = useAuth()
 
-  console.log('[ProtectedRoute] loading:', loading, '| user:', user?.email, '| role:', user?.role, '| allowedRoles:', allowedRoles)
-
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
@@ -23,14 +21,15 @@ export function ProtectedRoute({
     )
   }
 
-  if (!user) {
-    console.log('[ProtectedRoute] no user → redirecting to', redirectTo)
-    return <Navigate to={redirectTo} replace />
-  }
+  if (!user) return <Navigate to={redirectTo} replace />
 
   if (allowedRoles && !allowedRoles.includes(user.role)) {
-    console.log('[ProtectedRoute] role mismatch — user.role:', user.role, 'not in', allowedRoles, '→ blocking redirect (DEBUG)')
-    return <Navigate to={redirectTo} replace />
+    const roleHome: Record<UserRole, string> = {
+      fan: '/tickets',
+      staff: '/staff',
+      admin: '/admin',
+    }
+    return <Navigate to={roleHome[user.role]} replace />
   }
 
   return <Outlet />
