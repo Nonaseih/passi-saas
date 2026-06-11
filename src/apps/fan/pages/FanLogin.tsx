@@ -19,7 +19,10 @@ export function FanLogin() {
 
   // Redirect once AuthContext has a user — render-time redirect avoids
   // the removeChild crash that useEffect + navigate() causes in StrictMode.
-  if (!authLoading && user) return <Navigate to="/home" replace />
+  if (!authLoading && user) {
+    const dest = user.role === 'admin' ? '/admin' : user.role === 'staff' ? '/staff' : '/home'
+    return <Navigate to={dest} replace />
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
