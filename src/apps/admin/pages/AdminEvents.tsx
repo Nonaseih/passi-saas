@@ -316,7 +316,7 @@ export function AdminEvents() {
             icon: <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="9" stroke="#c08a20" strokeWidth="1.8"/><path d="M11 7v4l2.5 2.5" stroke="#c08a20" strokeWidth="1.8" strokeLinecap="round"/></svg> },
           { key: 'selling' as const, label: '販売中', desc: 'チケット販売受付中',
             icon: <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="9" stroke="#3d9b60" strokeWidth="1.8"/><path d="M7 11l3 3 5-5" stroke="#3d9b60" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg> },
-          { key: 'completed' as const, label: '終了', desc: '販売・イベント終了', danger: true,
+          { key: 'completed' as const, label: '終了', desc: '販売・イベント終了',
             icon: <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="9" stroke="#f08aa0" strokeWidth="1.8"/><path d="M14 8L8 14M8 8l6 6" stroke="#f08aa0" strokeWidth="1.8" strokeLinecap="round"/></svg> },
         ] as const
         return (
