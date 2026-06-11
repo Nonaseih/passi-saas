@@ -2,6 +2,7 @@ import { NavLink, Outlet } from 'react-router-dom'
 import type { ComponentType } from 'react'
 import {
   LayoutDashboard, Calendar, BarChart3, Users, LogOut, Settings,
+  Activity, ShoppingBag, Gift, UserCircle,
 } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import logoUrl from '@/public/logo.png'
@@ -18,19 +19,23 @@ const NAV_SECTIONS: NavSection[] = [
   {
     title: 'イベント',
     items: [
-      { to: '/admin/events', label: 'イベント管理', icon: Calendar },
+      { to: '/admin/events',  label: 'イベント管理', icon: Calendar },
+      { to: '/admin/live',    label: '当日の状況',   icon: Activity },
+      { to: '/admin/tickets', label: '商品管理',     icon: ShoppingBag },
     ],
   },
   {
-    title: '管理',
+    title: 'メンバー',
     items: [
-      { to: '/admin/staff', label: 'スタッフ', icon: Users },
+      { to: '/admin/staff', label: 'スタッフ',         icon: Users },
+      { to: '/admin/users', label: 'ユーザー管理',     icon: UserCircle },
     ],
   },
   {
-    title: '分析',
+    title: '分析 / 特典',
     items: [
-      { to: '/admin/sales', label: '売上レポート', icon: BarChart3 },
+      { to: '/admin/sales',   label: '売上レポート',     icon: BarChart3 },
+      { to: '/admin/points',  label: 'ポイントカード',   icon: Gift },
     ],
   },
 ]
