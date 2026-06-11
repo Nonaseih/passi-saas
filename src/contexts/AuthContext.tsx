@@ -45,6 +45,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         clearTimeout(failsafe)
         setSession(session)
         if (session?.user) {
+          setLoading(true)
           fetchUserProfile(session.user)
         } else {
           setUser(null)
