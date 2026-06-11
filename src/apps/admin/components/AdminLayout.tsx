@@ -118,18 +118,26 @@ export function AdminLayout() {
 
         {/* Bottom */}
         <div className="px-3 py-4 space-y-0.5" style={{ borderTop: '1px solid #ebe8f6' }}>
+          <NavLink
+            to="/admin/settings"
+            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all"
+            style={({ isActive }) =>
+              isActive
+                ? { background: 'linear-gradient(135deg, rgba(156,124,242,.13), rgba(133,127,255,.08))', border: '1.5px solid rgba(156,124,242,.20)', color: '#9c7cf2', fontWeight: 700 }
+                : { color: '#c7bcff', border: '1.5px solid transparent' }
+            }
+            onMouseEnter={e => { const el = e.currentTarget as HTMLElement; if (!el.style.fontWeight.includes('700')) { el.style.background = '#f6f4ff'; el.style.color = '#9892b3' } }}
+            onMouseLeave={e => { const el = e.currentTarget as HTMLElement; if (!el.style.fontWeight.includes('700')) { el.style.background = ''; el.style.color = '#c7bcff' } }}
+          >
+            <Settings className="w-4 h-4" />
+            設定
+          </NavLink>
           <button
             onClick={() => signOut()}
             className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all"
             style={{ color: '#c7bcff', border: '1.5px solid transparent' }}
-            onMouseEnter={e => {
-              e.currentTarget.style.background = '#f6f4ff'
-              e.currentTarget.style.color = '#9892b3'
-            }}
-            onMouseLeave={e => {
-              e.currentTarget.style.background = ''
-              e.currentTarget.style.color = '#c7bcff'
-            }}
+            onMouseEnter={e => { e.currentTarget.style.background = '#f6f4ff'; e.currentTarget.style.color = '#9892b3' }}
+            onMouseLeave={e => { e.currentTarget.style.background = ''; e.currentTarget.style.color = '#c7bcff' }}
           >
             <LogOut className="w-4 h-4" />
             ログアウト
@@ -137,8 +145,10 @@ export function AdminLayout() {
         </div>
       </aside>
 
-      <main className="flex-1 overflow-y-auto" style={{ background: '#faf9ff' }}>
-        <Outlet />
+      <main className="flex-1 overflow-hidden flex flex-col" style={{ background: '#faf9ff' }}>
+        <div className="flex-1 overflow-y-auto">
+          <Outlet />
+        </div>
       </main>
     </div>
   )
