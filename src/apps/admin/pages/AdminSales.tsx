@@ -215,7 +215,8 @@ export function AdminSales() {
             ) : filteredEventList.map(ev => {
               const checked = selectedEventIds.has(ev.id)
               return (
-                <label key={ev.id} className="flex items-center gap-2.5 px-2 py-2 rounded-xl cursor-pointer transition-colors"
+                <label key={ev.id} onClick={() => toggleEvent(ev.id)}
+                  className="flex items-center gap-2.5 px-2 py-2 rounded-xl cursor-pointer transition-colors"
                   style={{ background: checked ? '#f0ebff' : 'transparent' }}
                   onMouseEnter={e => { if (!checked) (e.currentTarget as HTMLElement).style.background = '#f6f4ff' }}
                   onMouseLeave={e => { if (!checked) (e.currentTarget as HTMLElement).style.background = 'transparent' }}>
