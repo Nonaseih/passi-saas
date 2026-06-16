@@ -1,8 +1,5 @@
-# A project config file for the Supabase CLI.
-# Generated for PassI — project ref: isevhcauafjdxspyqfvu
-
-[project]
-project_id = "isevhcauafjdxspyqfvu"
+# Supabase local dev config for PassI
+# project ref: isevhcauafjdxspyqfvu
 
 [api]
 enabled = true
