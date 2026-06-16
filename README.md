@@ -53,9 +53,21 @@ fix/*       — bug fixes
 | Phase | Milestone | Status |
 |-------|-----------|--------|
 | 1 | M1: Foundation + DB + Auth skeleton | ✅ Complete |
-| 1 | M2: Auth + Stripe + QR issuance | 🔲 Pending |
+| 1 | M2: Auth + Stripe + QR issuance | 🔄 In Progress |
 | 1 | M3: QR scan + mogiri + offline | 🔲 Pending |
 | 1 | M4: Admin dashboard + testing | 🔲 Pending |
+
+### M2 Progress
+- [x] Auth (fan login / register / forgot-password / reset-password)
+- [x] Stripe publishable key wired (`VITE_STRIPE_PUBLISHABLE_KEY`)
+- [x] Stripe secret key added to Supabase Edge Function secrets
+- [x] Edge functions written (`create-checkout-session`, `stripe-webhook`, `stripe-connect-onboard`)
+- [x] `supabase/config.toml` created for CLI deployment
+- [ ] Edge functions deployed (`npx supabase functions deploy ...`)
+- [ ] `STRIPE_WEBHOOK_SECRET` received from client and added to Supabase secrets
+- [ ] `APP_URL` secret set in Supabase Edge Functions
+- [ ] Admin Stripe Connect onboarding tested end-to-end
+- [ ] QR issuance verified post-payment
 
 ## Project Structure
 
