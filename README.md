@@ -71,11 +71,14 @@ fix/*       — bug fixes
 - [x] Stripe secret key added to Supabase Edge Function secrets
 - [x] Edge functions written (`create-checkout-session`, `stripe-webhook`, `stripe-connect-onboard`)
 - [x] `supabase/config.toml` created for CLI deployment
+- [x] Stripe Connect changed from Express → **Custom** (PASSi-managed onboarding, `controller.requirement_collection: 'application'`)
+- [x] Role gating confirmed: `staff` blocked from `/admin/*`, `admin` can use both apps
 - [ ] Edge functions deployed (`npx supabase functions deploy ...`)
 - [ ] `STRIPE_WEBHOOK_SECRET` received from client and added to Supabase secrets
 - [ ] `APP_URL` secret set in Supabase Edge Functions
-- [ ] Admin Stripe Connect onboarding tested end-to-end
 - [ ] QR issuance verified post-payment
+
+> **Note — Stripe Connect Custom onboarding form** (collecting bank account + identity info and submitting to Stripe API) is deferred to **M4**.
 
 ## Project Structure
 
