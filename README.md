@@ -7,8 +7,16 @@
 | App | Path | Users |
 |-----|------|-------|
 | Fan App | `/` `/tickets` `/purchase` | ファン |
-| Staff App | `/staff` `/staff/scan` | スタッフ |
-| Admin Dashboard | `/admin` | 運営 |
+| Staff App | `/staff` `/staff/scan` | スタッフ（もぎり・枚数把握のみ、スマホ専用） |
+| Admin Dashboard | `/admin` | admin ロールのみ（売上・イベント設定等） |
+
+## Roles
+
+| Role | Access |
+|------|--------|
+| `fan` | Fan app only |
+| `staff` | Staff app only (scanner + history). Cannot access admin routes. |
+| `admin` | Admin dashboard + staff app. Full access. |
 
 ## Tech Stack
 
