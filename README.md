@@ -23,7 +23,7 @@
 - **Frontend**: React 18 + TypeScript + Vite
 - **Styling**: Tailwind CSS + shadcn/ui
 - **Backend/DB**: Supabase (PostgreSQL + Auth + Realtime)
-- **Payments**: Stripe
+- **Payments**: Stripe Connect **Custom** (PASSi manages operator review + bank account submission — operators have no Stripe dashboard)
 - **QR**: qrcode + html5-qrcode
 - **Offline**: IndexedDB (idb)
 - **Deploy**: Vercel
