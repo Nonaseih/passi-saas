@@ -75,7 +75,7 @@ fix/*       — bug fixes
 - [x] Role gating confirmed: `staff` blocked from `/admin/*`, `admin` can use both apps
 - [x] Edge functions deployed (`create-checkout-session`, `stripe-connect-onboard`, `stripe-webhook`)
 - [x] `APP_URL` secret set in Supabase Edge Functions (`http://localhost:5173`)
-- [ ] `STRIPE_WEBHOOK_SECRET` received from client and added to Supabase secrets
+- [x] `STRIPE_WEBHOOK_SECRET` received from client and added to Supabase secrets
 - [ ] QR issuance verified post-payment
 
 > **Note — Stripe Connect Custom onboarding form** (collecting bank account + identity info and submitting to Stripe API) is deferred to **M4**.
