@@ -77,6 +77,9 @@ fix/*       — bug fixes
 - [x] `APP_URL` secret set in Supabase Edge Functions (`http://localhost:5173`)
 - [x] `STRIPE_WEBHOOK_SECRET` received from client and added to Supabase secrets
 - [ ] QR issuance verified post-payment
+- [x] Root-caused client-reported checkout error: `create-checkout-session` 402s with "グループの Stripe 連携が未完了です" because no connected account can reach `onboarding_complete` until the M4 onboarding form exists — frontend was also swallowing the real error behind supabase-js's generic "non-2xx" message (fixed in `FanPurchase.tsx`)
+- [ ] Run `complete-stripe-test-onboarding.mjs` (test-mode stopgap) to unblock one operator's checkout ahead of the real M4 form
+- [ ] Client flagged M2 build as missing group/member selection, multi-item cart, and points vs. their prototype — confirmed these are out of the M1–M4 agreed scope (see `docs/client-scope-clarification-m2.md`); awaiting client decision on scope before building
 
 > **Note — Stripe Connect Custom onboarding form** (collecting bank account + identity info and submitting to Stripe API) is deferred to **M4**.
 
