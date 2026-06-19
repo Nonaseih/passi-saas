@@ -63,7 +63,21 @@ export function FanPurchase() {
           user_id: user.id,
         },
       })
-      if (error) throw new Error(error.message)
+      if (error) {
+        // supabase-js's FunctionsHttpError.message is always the generic
+        // "Edge Function returned a non-2xx status code" — the real reason
+        // is JSON in the response body, reachable via error.context.
+        let message = error.message
+        if (error instanceof FunctionsHttpError) {
+          try {
+            const body = await error.context.json()
+            if (body?.error) message = body.error
+          } catch {
+            // response body wasn't JSON — fall back to generic message
+          }
+        }
+        throw new Error(message)
+      }
       if (data?.url) window.location.href = data.url
     } catch (err) {
       setError(err instanceof Error ? err.message : '決済の開始に失敗しました')
