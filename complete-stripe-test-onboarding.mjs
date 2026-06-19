@@ -167,7 +167,9 @@ async function main() {
     },
     business_profile: {
       mcc: '7929',
-      url: process.env.APP_URL || 'https://example.com',
+      // Stripe rejects localhost as a business URL — use a public placeholder
+      // for the test account (this is not the operator's real site).
+      url: 'https://passi-saas.example.com',
       product_description: 'アイドルグループ特典券（デジタルチェキ券）の販売',
     },
     tos_acceptance: {
