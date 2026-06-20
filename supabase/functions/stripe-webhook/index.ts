@@ -26,7 +26,7 @@ Deno.serve(async (req) => {
   for (const secret of [connectSecret, accountSecret]) {
     if (!secret) continue
     try {
-      event = stripe.webhooks.constructEvent(body, signature, secret)
+      event = await stripe.webhooks.constructEventAsync(body, signature, secret)
       verified = true
       break
     } catch {
