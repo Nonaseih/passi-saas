@@ -61,7 +61,7 @@ fix/*       — bug fixes
 | Phase | Milestone | Status |
 |-------|-----------|--------|
 | 1 | M1: Foundation + DB + Auth skeleton | ✅ Complete |
-| 1 | M2: Auth + Stripe + QR issuance | 🔄 In Progress |
+| 1 | M2: Auth + Stripe + QR issuance | ✅ Complete |
 | 1 | M3: QR scan + mogiri + offline | 🔲 Pending |
 | 1 | M4: Admin dashboard + testing | 🔲 Pending |
 
