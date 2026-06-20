@@ -114,7 +114,7 @@ export function FanPurchase() {
   }
 
   return (
-    <FanLayout>
+    <FanLayout hideNav>
       <FanTopbar title="特典券の購入" centered onBack={() => navigate(-1)} />
 
       <div className="content" style={{ paddingBottom: 120 }}>

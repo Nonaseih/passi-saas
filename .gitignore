@@ -12,6 +12,7 @@ build/
 .env
 .env.local
 .env.*.local
+.env.onboard
 
 # Editor
 .vscode/*
@@ -39,3 +40,6 @@ supabase/.temp/
 
 # Claude Code
 .claude/
+
+.vercel
+.env*.local

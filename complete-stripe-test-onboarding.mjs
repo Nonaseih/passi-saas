@@ -30,6 +30,30 @@
 // still considers missing.
 // ============================================================
 
+import { readFileSync, existsSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
+import { dirname, join } from 'node:path'
+
+// Load secrets from a local, gitignored .env.onboard so they never need to be
+// typed on the command line (and never enter any chat transcript). Existing
+// process.env values win, so you can still override via the shell if you want.
+const envPath = join(dirname(fileURLToPath(import.meta.url)), '.env.onboard')
+if (existsSync(envPath)) {
+  for (const rawLine of readFileSync(envPath, 'utf8').split('\n')) {
+    const line = rawLine.trim()
+    if (!line || line.startsWith('#')) continue
+    const eq = line.indexOf('=')
+    if (eq === -1) continue
+    const key = line.slice(0, eq).trim()
+    let val = line.slice(eq + 1).trim()
+    if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
+      val = val.slice(1, -1)
+    }
+    if (!(key in process.env)) process.env[key] = val
+  }
+  console.log(`Loaded secrets from ${envPath} (values not shown)`)
+}
+
 function requireEnv(name) {
   const v = process.env[name]
   if (!v) {
@@ -96,7 +120,7 @@ async function supabaseRequest(method, path, body, extraHeaders = {}) {
   if (!res.ok) {
     throw new Error(`Supabase ${method} ${path} failed (${res.status}): ${await res.text()}`)
   }
-  return res.status === 204 ? null : res.json()
+  const text = await res.text(); return text ? JSON.parse(text) : null
 }
 
 async function main() {
@@ -112,7 +136,6 @@ async function main() {
   if (!accountId) {
     console.log('No connected_accounts row yet — creating Stripe Custom account...')
     const account = await stripeRequest('POST', '/accounts', flattenToParams({
-      type: 'custom',
       country: 'JP',
       capabilities: { card_payments: { requested: true }, transfers: { requested: true } },
       controller: {
@@ -137,7 +160,7 @@ async function main() {
   const fileForm = new FormData()
   fileForm.append('purpose', 'identity_document')
   fileForm.append('file', new Blob([new Uint8Array([0xff, 0xd8, 0xff, 0xd9])], { type: 'image/jpeg' }), 'test-id.jpg')
-  const file = await stripeRequest('POST', '/files', fileForm, { stripeAccount: accountId })
+  const file = { id: 'file_identity_document_success' }
   console.log(`Uploaded file ${file.id}`)
 
   console.log('Submitting JP individual + bank info using Stripe test fixtures...')
@@ -146,14 +169,15 @@ async function main() {
   // and bank_code 1100 / branch_code 000 / account_number 0001234 is Stripe's
   // documented "payout succeeds" JP test account.
   await stripeRequest('POST', `/accounts/${accountId}`, flattenToParams({
+    business_type: 'individual',
     individual: {
       first_name_kana: 'タロウ',
       last_name_kana: 'パスアイ',
       first_name_kanji: '太郎',
       last_name_kanji: 'パスアイ',
       gender: 'male',
-      dob: { day: 1, month: 1, year: 1902 },
-      phone: '0000000000',
+      dob: { day: 1, month: 1, year: 1901 },
+      phone: '+81312345678',
       email: OPERATOR_EMAIL,
       address_kana: {
         country: 'JP', postal_code: '1500001', state: 'ﾄｳｷﾖｳﾄ', city: 'ｼﾌﾞﾔ',
@@ -163,13 +187,13 @@ async function main() {
         country: 'JP', postal_code: '１５００００１', state: '東京都', city: '渋谷区',
         town: '神宮前　１丁目', line1: '５－８', line2: '神宮前タワービルディング22F',
       },
-      verification: { document: { front: file.id, back: file.id } },
+      verification: { document: { front: file.id } },
     },
     business_profile: {
       mcc: '7929',
       // Stripe rejects localhost as a business URL — use a public placeholder
       // for the test account (this is not the operator's real site).
-      url: 'https://passi-saas.example.com',
+      url: 'https://idol-deploy.vercel.app',
       product_description: 'アイドルグループ特典券（デジタルチェキ券）の販売',
     },
     tos_acceptance: {
@@ -182,8 +206,7 @@ async function main() {
       country: 'JP',
       currency: 'jpy',
       account_holder_name: 'ﾊﾟｽｱｲ',
-      bank_code: '1100',
-      branch_code: '000',
+      routing_number: '1100000',
       account_number: '0001234',
     },
   }))
