@@ -204,18 +204,15 @@ export function FanPurchase() {
             <div className="label">合計</div>
             <div className="value">{formatPrice(total)}</div>
           </div>
-          <div style={{ gridColumn: 'span 2' }}>
-            <button
-              className="primary-btn"
-              style={{ height: 48, fontSize: 14 }}
-              onClick={handleCheckout}
-              disabled={checking || ticketType.stock_remaining === 0}
-            >
-              <ShoppingCart size={16} />
-              {checking ? '処理中...' : 'Stripeで決済する'}
-            </button>
-          </div>
         </div>
+        <button
+          className="primary-btn"
+          style={{ width: '100%', height: 50, fontSize: 15, marginTop: 12 }}
+          onClick={handleCheckout}
+          disabled={checking || ticketType.stock_remaining === 0}
+        >
+          {checking ? '処理中...' : 'Stripeで決済する'}
+        </button>
       </div>
     </FanLayout>
   )
