@@ -564,7 +564,7 @@
 }
 .stepper-mini strong { min-width: 22px; text-align: center; font-size: 20px; font-weight: 800; color: var(--text); }
 .purchase-summary {
-  position: sticky; bottom: 0; margin: 18px -18px -6px;
+  position: sticky; bottom: 0; margin: 0;
   padding: 14px 18px calc(18px + env(safe-area-inset-bottom));
   background: rgba(255,255,255,.97); border-top: 1px solid var(--line);
   backdrop-filter: blur(14px); box-shadow: 0 -10px 26px rgba(74,58,146,.06);
