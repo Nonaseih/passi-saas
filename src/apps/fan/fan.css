@@ -570,8 +570,7 @@
   backdrop-filter: blur(14px); box-shadow: 0 -10px 26px rgba(74,58,146,.06);
 }
 .summary-row-line {
-  display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr) minmax(0,1fr) auto;
-  align-items: center; gap: 10px; margin-bottom: 2px;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
 }
 .summary-row-line .label { font-size: 11px; color: var(--text-2); font-weight: 700; }
 .summary-row-line .value { font-weight: 800; font-size: 14px; letter-spacing: -.01em; }
