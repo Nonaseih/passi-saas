@@ -74,12 +74,14 @@ fix/*       — bug fixes
 - [x] Stripe Connect changed from Express → **Custom** (PASSi-managed onboarding, `controller.requirement_collection: 'application'`)
 - [x] Role gating confirmed: `staff` blocked from `/admin/*`, `admin` can use both apps
 - [x] Edge functions deployed (`create-checkout-session`, `stripe-connect-onboard`, `stripe-webhook`)
-- [x] `APP_URL` secret set in Supabase Edge Functions (`http://localhost:5173`)
+- [x] `APP_URL` secret set in Supabase Edge Functions (`https://passi-saas.vercel.app`)
 - [x] `STRIPE_WEBHOOK_SECRET` received from client and added to Supabase secrets
-- [ ] QR issuance verified post-payment
-- [x] Root-caused client-reported checkout error: `create-checkout-session` 402s with "グループの Stripe 連携が未完了です" because no connected account can reach `onboarding_complete` until the M4 onboarding form exists — frontend was also swallowing the real error behind supabase-js's generic "non-2xx" message (fixed in `FanPurchase.tsx`)
-- [ ] Run `complete-stripe-test-onboarding.mjs` (test-mode stopgap) to unblock one operator's checkout ahead of the real M4 form
-- [ ] Client flagged M2 build as missing group/member selection, multi-item cart, and points vs. their prototype — confirmed these are out of the M1–M4 agreed scope (see `docs/client-scope-clarification-m2.md`); awaiting client decision on scope before building
+- [x] **Stripe Connect enabled** on the platform account (client, test mode) — prerequisite for connected-account checkout
+- [x] Operator's connected account onboarded via `complete-stripe-test-onboarding.mjs` stopgap (`charges_enabled`, `onboarding_complete = true`)
+- [x] **Connect webhook** endpoint created (receives connected-account events) + `STRIPE_CONNECT_WEBHOOK_SECRET` set
+- [x] **Fixed webhook signature verification**: `constructEvent` → `await constructEventAsync` (Deno requires async Web Crypto) — this was silently returning 400 on every event, so no ticket issued
+- [x] **QR issuance verified post-payment** — replayed real paid events: tickets issued (`active`), payments `paid`, stock decremented. Full purchase → ticket → QR chain confirmed end-to-end
+- [ ] Client requested groups/members/cart/points (prototype parity) — confirmed **out of the M1–M4 agreed scope**; proposed as paid M3 work, awaiting client decision
 
 > **Note — Stripe Connect Custom onboarding form** (collecting bank account + identity info and submitting to Stripe API) is deferred to **M4**.
 
