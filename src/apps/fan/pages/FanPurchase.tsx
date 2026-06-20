@@ -4,7 +4,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import { formatDate, formatPrice } from '@/lib/utils'
 import { supabase } from '@/lib/supabase'
 import { FunctionsHttpError } from '@supabase/supabase-js'
-import { ShoppingCart, CalendarDays, MapPin, Minus, Plus } from 'lucide-react'
+import { CalendarDays, MapPin, Minus, Plus } from 'lucide-react'
 import { FanLayout } from '../components/FanLayout'
 import { FanTopbar } from '../components/FanTopbar'
 
