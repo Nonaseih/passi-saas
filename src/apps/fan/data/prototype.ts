@@ -41,3 +41,31 @@ export const PURCHASE_EVENTS: PurchaseEvent[] = [
 // The one real, payable ticket type (テストライブ2026 / 2ショットチェキ券).
 // Prototype purchase CTAs point here so the real Stripe flow stays reachable.
 export const REAL_TICKET_TYPE_ID = 'c4d9d0ad-edc5-4e20-b36b-8c32a1892ab9'
+
+// ── Points system (visual dummy — Phase 2 feature, no backend) ──────────────
+export const GROUPS = [
+  { id: 'hzme', name: 'HzMe', points: 180, cardExpiry: '2026年12月31日' },
+  { id: 'appare', name: 'Appare!', points: 350, cardExpiry: '2026年09月30日' },
+  { id: 'myojou', name: 'myojou', points: 80, cardExpiry: '2027年03月31日' },
+] as const
+
+export interface Reward { id: string; label: string; points: number; status: string; desc: string; expiry: string | null }
+export const REWARDS: Reward[] = [
+  { id: 'r30', label: 'サインありチェキ券', points: 30, status: '達成済み', desc: '当日のみ利用できる特典券です。', expiry: '2026/08/31' },
+  { id: 'r50', label: '2ショット写メ券', points: 50, status: '達成済み', desc: '利用時はスタッフ確認が必要です。', expiry: '2026/08/31' },
+  { id: 'r100', label: '動画チェキ券', points: 100, status: '達成済み', desc: '30秒以内の撮影特典です。', expiry: '2026/08/31' },
+  { id: 'r150', label: 'お手紙', points: 150, status: '達成済み', desc: 'ニックネームと受け取り方法の入力が必要です。', expiry: '2026/08/31' },
+  { id: 'r200', label: '宿題チェキ券', points: 200, status: '未達成', desc: '後日受け取りの特典券です。', expiry: null },
+]
+
+export interface PointHistoryRow { date: string; label: string; points: number | null; type: 'plus' | 'used' }
+export const POINT_HISTORY: PointHistoryRow[] = [
+  { date: '2024/05/18 13:05', label: 'サインありチェキ券 購入', points: 2, type: 'plus' },
+  { date: '2024/05/16 18:40', label: '動画チェキ券 使用', points: null, type: 'used' },
+  { date: '2024/05/03 14:20', label: '2ショット写メ券 購入', points: 5, type: 'plus' },
+  { date: '2024/04/28 16:00', label: 'サインありチェキ券 使用', points: null, type: 'used' },
+  { date: '2024/04/15 18:45', label: '動画チェキ券 購入', points: 3, type: 'plus' },
+  { date: '2024/04/08 13:10', label: 'お手紙 使用', points: null, type: 'used' },
+  { date: '2024/03/22 15:50', label: 'サインありチェキ券 購入', points: 2, type: 'plus' },
+  { date: '2024/03/15 17:30', label: '動画チェキ券 購入', points: 3, type: 'plus' },
+]
