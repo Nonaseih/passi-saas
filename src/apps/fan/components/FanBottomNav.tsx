@@ -1,12 +1,12 @@
 import { useNavigate, useLocation } from 'react-router-dom'
-import { Home, Ticket, History, User } from 'lucide-react'
+import { Icon, type IconName } from './Icon'
 
-const TABS = [
-  { icon: Home,    label: 'ホーム',     path: '/home' },
-  { icon: Ticket,  label: '特典券',     path: '/tickets' },
-  { icon: History, label: '履歴',       path: '/history' },
-  { icon: User,    label: 'マイページ', path: '/mypage' },
-] as const
+const TABS: { icon: IconName; label: string; path: string }[] = [
+  { icon: 'home',   label: 'ホーム',     path: '/home' },
+  { icon: 'ticket', label: '特典券',     path: '/tickets' },
+  { icon: 'card',   label: 'ポイント',   path: '/points' },
+  { icon: 'user',   label: 'マイページ', path: '/mypage' },
+]
 
 export function FanBottomNav() {
   const navigate = useNavigate()
@@ -14,7 +14,7 @@ export function FanBottomNav() {
 
   return (
     <nav className="bottom-nav">
-      {TABS.map(({ icon: Icon, label, path }) => {
+      {TABS.map(({ icon, label, path }) => {
         const active = pathname === path || (path !== '/home' && pathname.startsWith(path))
         return (
           <button
@@ -22,7 +22,7 @@ export function FanBottomNav() {
             className={`nav-item${active ? ' active' : ''}`}
             onClick={() => navigate(path)}
           >
-            <div className="tab-icon"><Icon size={20} /></div>
+            <div className="tab-icon"><Icon name={icon} size={20} /></div>
             <span>{label}</span>
           </button>
         )
