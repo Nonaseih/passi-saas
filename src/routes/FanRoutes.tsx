@@ -12,6 +12,10 @@ import { FanPurchase } from '@/apps/fan/pages/FanPurchase'
 import { FanHistory } from '@/apps/fan/pages/FanHistory'
 import { FanMyPage } from '@/apps/fan/pages/FanMyPage'
 import { FanNotifications } from '@/apps/fan/pages/FanNotifications'
+import { FanPoints } from '@/apps/fan/pages/FanPoints'
+import { FanPointDetail } from '@/apps/fan/pages/FanPointDetail'
+import { FanPointHistory } from '@/apps/fan/pages/FanPointHistory'
+import { FanPointReward } from '@/apps/fan/pages/FanPointReward'
 
 export function FanRoutes() {
   return (
