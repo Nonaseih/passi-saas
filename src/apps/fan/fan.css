@@ -638,6 +638,49 @@
 /* ── Misc ── */
 .caption { font-size: 12px; color: var(--text-2); }
 .muted { color: var(--text-2); }
+
+/* ── Points tab (ported from prototype) ── */
+.points-card { padding: 12px; display: flex; gap: 14px; align-items: center; cursor: pointer; text-align: left; }
+.points-card__img { width: 132px; height: 88px; border-radius: 16px; flex: 0 0 auto; background: linear-gradient(135deg, #d2bcff 0%, #c9d0ff 100%); }
+.points-value { color: var(--primary); font-size: 18px; font-weight: 800; margin-top: 8px; display: flex; align-items: center; gap: 6px; }
+.points-value.big { font-size: 22px; }
+.card-expiry-label { font-size: 9.5px; color: var(--text-3); font-weight: 500; margin-top: 6px; }
+
+.content--point-detail { padding: 0; }
+.content--point-detail .points-summary { padding-bottom: 120px; }
+.banner { width: 100%; position: relative; }
+.banner__img { width: 100%; height: 200px; background: linear-gradient(135deg, #d2bcff 0%, #c9d0ff 100%); }
+.banner--detail .banner__img { height: 194px; }
+.points-summary { margin-top: -22px; position: relative; background: white; border-radius: 28px 28px 0 0; padding: 20px 18px 10px; box-shadow: 0 -12px 30px rgba(80,61,170,.05); }
+.section-head--points { align-items: flex-start; justify-content: space-between; display: flex; }
+.points-summary__left { display: flex; flex-direction: column; }
+.outline-pill { min-width: 76px; height: 28px; padding: 0 11px; border-radius: 999px; border: 1px solid var(--line); background: white; color: var(--text-2); font-size: 10.5px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; }
+
+.secondary-chip { border: 1px solid var(--line); background: var(--surface); border-radius: 18px; padding: 10px 14px; color: var(--text-2); font-size: 12px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; white-space: nowrap; }
+.secondary-chip.active { background: linear-gradient(90deg, var(--primary), var(--primary-2)); color: white; border-color: transparent; }
+.reward-segments { display: flex; gap: 10px; margin-top: 16px; }
+.reward-segments .secondary-chip { flex: 1; min-width: 0; height: 42px; }
+
+.reward-list { margin-top: 18px; position: relative; padding-left: 6px; }
+.reward-row { position: relative; display: flex; align-items: center; gap: 14px; padding: 12px 14px 12px 10px; cursor: pointer; width: 100%; text-align: left; background: white; border: none; border-radius: 22px; box-shadow: var(--shadow-sm), inset 0 0 0 1px rgba(235,232,246,.95); margin-bottom: 12px; }
+.reward-point { width: 64px; height: 64px; border-radius: 16px; background: white; border: 1px solid #dbd3ff; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: 800; color: var(--primary); flex: 0 0 auto; box-shadow: 0 6px 14px rgba(156,124,242,.08); }
+.reward-point span { font-size: 22px; line-height: 1; letter-spacing: -.01em; }
+.reward-point small { font-size: 11px; font-weight: 700; margin-top: 2px; letter-spacing: .02em; }
+.reward-content { flex: 1; min-width: 0; padding-right: 6px; overflow: hidden; }
+.reward-name { font-size: 13px; font-weight: 700; line-height: 1.4; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.reward-desc { font-size: 10px; color: var(--text-3); margin-top: 3px; line-height: 1.4; font-weight: 400; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.reward-status { min-width: 92px; text-align: right; display: flex; align-items: center; justify-content: flex-end; gap: 8px; }
+
+.reward-card { padding: 18px; background: white; border-radius: 22px; border: 1px solid var(--line); box-shadow: var(--shadow-sm); text-align: center; }
+.reward-card__eyebrow { display: inline-flex; height: 28px; padding: 0 16px; align-items: center; border-radius: 999px; color: white; font-size: 12px; font-weight: 800; background: linear-gradient(90deg, var(--primary), var(--primary-2)); }
+.reward-card__name { margin-top: 14px; font-size: 26px; font-weight: 800; }
+.reward-card__points { margin: 24px auto 18px; width: 150px; height: 150px; border-radius: 50%; border: 2px solid #e7e0ff; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--primary); font-weight: 800; background: radial-gradient(circle at 50% 36%, #ffffff 0%, #faf8ff 58%, #f2efff 100%); }
+.reward-card__points strong { font-size: 48px; line-height: 1; }
+
+.history-row__points { font-weight: 800; font-size: 13px; white-space: nowrap; }
+.history-row__label--used { color: var(--text-3); }
+.history-row__points--plus { color: var(--primary); }
+.history-row__points--used { font-size: 11px; font-weight: 600; color: var(--text-3); background: #f3f3f8; border-radius: 99px; padding: 2px 8px; }
 .pill-tag { height: 26px; padding: 0 10px; background: #f0eeff; color: var(--text-2); }
 .form-title { font-size: 12px; color: var(--text-2); font-weight: 800; margin-bottom: 10px; display: flex; justify-content: space-between; }
 .required { color: var(--primary); }
