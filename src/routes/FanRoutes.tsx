@@ -33,6 +33,10 @@ export function FanRoutes() {
         <Route path="/tickets/:ticketId" element={<FanTicketDetail />} />
         <Route path="/purchase/:ticketTypeId" element={<FanPurchase />} />
         <Route path="/history" element={<FanHistory />} />
+        <Route path="/points" element={<FanPoints />} />
+        <Route path="/points/:groupId" element={<FanPointDetail />} />
+        <Route path="/points/:groupId/history" element={<FanPointHistory />} />
+        <Route path="/points/:groupId/reward/:rewardId" element={<FanPointReward />} />
         <Route path="/mypage" element={<FanMyPage />} />
         <Route path="/notifications" element={<FanNotifications />} />
       </Route>
