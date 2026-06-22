@@ -4,6 +4,7 @@ import { FanLayout } from '../components/FanLayout'
 import { FanTopbar } from '../components/FanTopbar'
 import { Icon } from '../components/Icon'
 import { SEARCH_GROUPS, PURCHASE_EVENTS, REAL_TICKET_TYPE_ID, type PurchaseEvent } from '../data/prototype'
+import passLogo from '@/public/logo.png'
 
 type Filter = 'selling' | 'today' | 'tomorrow' | 'date' | null
 
