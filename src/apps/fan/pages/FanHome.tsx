@@ -130,7 +130,14 @@ export function FanHome() {
 
   return (
     <FanLayout>
-      <FanTopbar title="IDOL EVENTS" centered right={<div style={{ width: 36 }} />} />
+      <FanTopbar
+        title={<img src={passLogo} alt="PASSi" style={{ height: 32, objectFit: 'contain' }} />}
+        right={
+          <button className="icon-btn" aria-label="通知" onClick={() => navigate('/notifications')}>
+            <Icon name="bell" size={18} />
+          </button>
+        }
+      />
 
       <div className="content content--home">
         {/* Hero */}
