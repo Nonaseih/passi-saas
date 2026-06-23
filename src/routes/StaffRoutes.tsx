@@ -2,7 +2,7 @@ import { Routes, Route } from 'react-router-dom'
 import { ProtectedRoute } from '@/components/shared/ProtectedRoute'
 
 import { StaffLogin } from '@/apps/staff/pages/StaffLogin'
-import { StaffHome } from '@/apps/staff/pages/StaffHome'
+import { StaffProgress } from '@/apps/staff/pages/StaffProgress'
 import { StaffScanner } from '@/apps/staff/pages/StaffScanner'
 import { StaffHistory } from '@/apps/staff/pages/StaffHistory'
 
