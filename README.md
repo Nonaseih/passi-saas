@@ -62,7 +62,7 @@ fix/*       — bug fixes
 |-------|-----------|--------|
 | 1 | M1: Foundation + DB + Auth skeleton | ✅ Complete |
 | 1 | M2: Auth + Stripe + QR issuance | ✅ Complete |
-| 1 | M3: QR scan + mogiri + offline | 🔲 Pending |
+| 1 | M3: QR scan + mogiri + offline | 🔄 In Progress (staff frontend reproduced to client design) |
 | 1 | M4: Admin dashboard + testing | 🔲 Pending |
 
 ### M2 Progress
