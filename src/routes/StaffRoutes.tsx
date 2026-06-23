@@ -13,6 +13,7 @@ import { StaffHistory } from '@/apps/staff/pages/StaffHistory'
 
 export function StaffRoutes() {
   return (
+    <div className="staff-app">
     <Routes>
       {/* Public */}
       <Route path="/staff/login" element={<StaffLogin />} />
