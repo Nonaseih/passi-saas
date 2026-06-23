@@ -57,7 +57,7 @@ export function FanTickets() {
                 <button
                   key={ticket.id}
                   className="card row-card ticket-list-item"
-                  onClick={() => navigate(`/tickets/${ticket.id}`)}
+                  onClick={() => (tab === 'used' ? setUsedModal(true) : navigate(`/tickets/${ticket.id}`))}
                   style={{ textAlign: 'left' }}
                 >
                   <div className="ticket-list-thumb"><Icon name="ticket" size={22} /></div>
