@@ -689,6 +689,11 @@
 .list-headline__title { font-size: 17px; font-weight: 800; }
 .list-headline__count { font-size: 18px; font-weight: 800; color: var(--text); }
 .qty-large { font-size: 12px; font-weight: 600; color: var(--primary); }
+
+/* ── 推しグループ設定 (ported from prototype) ── */
+.oshi-action-btn { flex: 0 0 auto; border-radius: 99px; font-size: 12px; font-weight: 700; padding: 6px 16px; border: none; cursor: pointer; }
+.oshi-action-btn--add { background: linear-gradient(135deg, var(--primary), var(--primary-2)); color: white; box-shadow: 0 2px 8px rgba(156,124,242,.28); }
+.oshi-action-btn--remove { background: #f3f3f8; color: var(--text-3); border: 1px solid var(--line); }
 .pill-tag { height: 26px; padding: 0 10px; background: #f0eeff; color: var(--text-2); }
 .form-title { font-size: 12px; color: var(--text-2); font-weight: 800; margin-bottom: 10px; display: flex; justify-content: space-between; }
 .required { color: var(--primary); }
