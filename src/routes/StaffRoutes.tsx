@@ -20,6 +20,11 @@ export function StaffRoutes() {
       {/* Protected — staff + admin */}
       <Route element={<ProtectedRoute allowedRoles={['staff', 'admin']} redirectTo="/staff/login" />}>
         <Route path="/staff" element={<StaffProgress />} />
+        <Route path="/staff/settings" element={<StaffSettings />} />
+        <Route path="/staff/settings/ticket-times" element={<StaffTicketTimeSettings />} />
+        <Route path="/staff/settings/notifications" element={<StaffNotificationSettings />} />
+        <Route path="/staff/settings/account" element={<StaffAccount />} />
+        <Route path="/staff/settings/help" element={<StaffHelp />} />
         <Route path="/staff/scan" element={<StaffScanner />} />
         <Route path="/staff/history" element={<StaffHistory />} />
       </Route>
