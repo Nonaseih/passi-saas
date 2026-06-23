@@ -12,6 +12,7 @@ export function FanTickets() {
   const { tickets, loading } = useTickets()
   const navigate = useNavigate()
   const [tab, setTab] = useState<Tab>('unused')
+  const [usedModal, setUsedModal] = useState(false)
 
   const unused = tickets.filter((t) => t.status === 'active')
   const used = tickets.filter((t) => t.status === 'used')
