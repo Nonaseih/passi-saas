@@ -681,6 +681,14 @@
 .history-row__label--used { color: var(--text-3); }
 .history-row__points--plus { color: var(--primary); }
 .history-row__points--used { font-size: 11px; font-weight: 600; color: var(--text-3); background: #f3f3f8; border-radius: 99px; padding: 2px 8px; }
+
+/* ── 特典券一覧 (ported from prototype) ── */
+.inline-filters { display: flex; gap: 10px; margin-top: 14px; }
+.inline-filters .secondary-chip { min-width: 112px; }
+.list-headline { display: flex; align-items: flex-end; justify-content: space-between; margin: 18px 2px 10px; }
+.list-headline__title { font-size: 17px; font-weight: 800; }
+.list-headline__count { font-size: 18px; font-weight: 800; color: var(--text); }
+.qty-large { font-size: 12px; font-weight: 600; color: var(--primary); }
 .pill-tag { height: 26px; padding: 0 10px; background: #f0eeff; color: var(--text-2); }
 .form-title { font-size: 12px; color: var(--text-2); font-weight: 800; margin-bottom: 10px; display: flex; justify-content: space-between; }
 .required { color: var(--primary); }
