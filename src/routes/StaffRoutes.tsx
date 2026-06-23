@@ -14,7 +14,7 @@ export function StaffRoutes() {
 
       {/* Protected — staff + admin */}
       <Route element={<ProtectedRoute allowedRoles={['staff', 'admin']} redirectTo="/staff/login" />}>
-        <Route path="/staff" element={<StaffHome />} />
+        <Route path="/staff" element={<StaffProgress />} />
         <Route path="/staff/scan" element={<StaffScanner />} />
         <Route path="/staff/history" element={<StaffHistory />} />
       </Route>
