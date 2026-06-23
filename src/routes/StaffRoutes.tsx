@@ -30,5 +30,6 @@ export function StaffRoutes() {
         <Route path="/staff/history" element={<StaffHistory />} />
       </Route>
     </Routes>
+    </div>
   )
 }
