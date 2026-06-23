@@ -58,3 +58,11 @@
     font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
   }
 }
+
+/* Staff app (M3) — match the admin-frontend design typography (scoped, fan app untouched) */
+.staff-app {
+  font-family: "Inter", "Noto Sans JP", "Hiragino Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+}
+.staff-app h1, .staff-app h2, .staff-app h3, .staff-app h4 {
+  font-family: "Zen Kaku Gothic New", "Noto Sans JP", "Hiragino Sans", -apple-system, sans-serif;
+}
