@@ -16,6 +16,10 @@ import { FanPoints } from '@/apps/fan/pages/FanPoints'
 import { FanPointDetail } from '@/apps/fan/pages/FanPointDetail'
 import { FanPointHistory } from '@/apps/fan/pages/FanPointHistory'
 import { FanPointReward } from '@/apps/fan/pages/FanPointReward'
+import { FanProfileEdit } from '@/apps/fan/pages/FanProfileEdit'
+import { FanOshiGroups } from '@/apps/fan/pages/FanOshiGroups'
+import { FanPayment } from '@/apps/fan/pages/FanPayment'
+import { FanDeliveryAddress } from '@/apps/fan/pages/FanDeliveryAddress'
 
 export function FanRoutes() {
   return (
