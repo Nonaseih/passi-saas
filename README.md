@@ -85,6 +85,14 @@ fix/*       — bug fixes
 
 > **Note — Stripe Connect Custom onboarding form** (collecting bank account + identity info and submitting to Stripe API) is deferred to **M4**.
 
+## Prototype reproduction (client design alignment)
+
+Client flagged the build "looked different" from their supplied designs; both apps are being reproduced 1:1.
+
+- **Fan app** → `fan-frontend/index.html`: home, bottom nav + icons, 特典券一覧, マイページ + sub-screens reproduced. Real data on built screens (tickets, auth); static dummies elsewhere. Foundations: `src/apps/fan/components/Icon.tsx`, `src/apps/fan/data/prototype.ts`.
+- **Staff app (M3)** → `admin-frontend` `Staff*`: rebuilt to the **整理番号 progress-management** design (chosen over the M1 QR-scan model per client; QR scanner shelved). 進行管理 / 整理番号, settings, **real account mgmt + Supabase password change**. Queue management is frontend-only (no backend); ticket redemption is now the fan's slide-to-use. Member/ticket images served from `public/`.
+- **Held — Phase 2 (out of M1–M4 scope, awaiting paid budget):** groups / members / cart / points / お手紙 — fan purchase flow, お手紙 application, group/point imagery. Kept as dummies until the additional quote settles.
+
 ## Project Structure
 
 ```
