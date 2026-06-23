@@ -2,9 +2,9 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTickets } from '@/hooks/useTickets'
 import { formatDate } from '@/lib/utils'
-import { SlidersHorizontal, Ticket } from 'lucide-react'
 import { FanLayout } from '../components/FanLayout'
 import { FanTopbar } from '../components/FanTopbar'
+import { Icon } from '../components/Icon'
 
 type Tab = 'unused' | 'used'
 
@@ -20,73 +20,66 @@ export function FanTickets() {
   return (
     <FanLayout>
       <FanTopbar
-        title="特典券"
-        right={
-          <button className="icon-btn" aria-label="絞り込み">
-            <SlidersHorizontal size={16} />
-          </button>
-        }
+        title="特典券一覧"
+        centered
+        right={<button className="icon-btn" aria-label="カート"><Icon name="cart" size={20} /></button>}
       />
 
-      {/* Segmented tabs */}
-      <div style={{ padding: '0 18px 14px' }}>
-        <div className="segmented">
-          <button
-            className={`seg-btn${tab === 'unused' ? ' active' : ''}`}
-            onClick={() => setTab('unused')}
-          >
-            未使用{unused.length > 0 ? `（${unused.length}）` : ''}
-          </button>
-          <button
-            className={`seg-btn${tab === 'used' ? ' active' : ''}`}
-            onClick={() => setTab('used')}
-          >
-            使用済み
-          </button>
-        </div>
-      </div>
+      <div className="content">
+        <section className="section">
+          <div className="segmented">
+            <button className={`seg-btn${tab === 'unused' ? ' active' : ''}`} onClick={() => setTab('unused')}>未使用</button>
+            <button className={`seg-btn${tab === 'used' ? ' active' : ''}`} onClick={() => setTab('used')}>使用済み</button>
+          </div>
 
-      <div className="content" style={{ paddingTop: 0 }}>
-        {loading ? (
-          <div className="list ticket-list">
-            {[0, 1, 2].map((i) => (
-              <div key={i} className="fan-skeleton" style={{ height: 80, borderRadius: 20 }} />
-            ))}
+          <div className="inline-filters">
+            <button className="secondary-chip active">すべて</button>
+            <button className="secondary-chip"><Icon name="filter" size={14} /> 絞り込み</button>
           </div>
-        ) : shown.length === 0 ? (
-          <EmptyState tab={tab} onGoHome={() => navigate('/home')} />
-        ) : (
-          <div className="list ticket-list">
-            {shown.map((ticket) => (
-              <button
-                key={ticket.id}
-                className="card row-card ticket-list-item"
-                onClick={() => navigate(`/tickets/${ticket.id}`)}
-                style={{ textAlign: 'left' }}
-              >
-                <div className="ticket-list-thumb">
-                  <Ticket size={22} color="var(--primary-3)" />
-                </div>
-                <div className="ticket-list-main">
-                  <div className="ticket-list-title">{ticket.ticket_type?.name}</div>
-                  <div className="ticket-list-sub">{ticket.event?.title}</div>
-                  <div className="ticket-list-meta">
-                    {ticket.event?.date ? formatDate(ticket.event.date) : ''} · {ticket.event?.venue}
+
+          <div className="list-headline">
+            <div className="list-headline__title">{tab === 'unused' ? '未使用特典券' : '使用済み特典券'}</div>
+            <div className="list-headline__count">{shown.length}枚</div>
+          </div>
+
+          {loading ? (
+            <div className="list ticket-list">
+              {[0, 1, 2].map((i) => (
+                <div key={i} className="fan-skeleton" style={{ height: 80, borderRadius: 20 }} />
+              ))}
+            </div>
+          ) : shown.length === 0 ? (
+            <EmptyState tab={tab} onGoHome={() => navigate('/home')} />
+          ) : (
+            <div className="list ticket-list">
+              {shown.map((ticket) => (
+                <button
+                  key={ticket.id}
+                  className="card row-card ticket-list-item"
+                  onClick={() => navigate(`/tickets/${ticket.id}`)}
+                  style={{ textAlign: 'left' }}
+                >
+                  <div className="ticket-list-thumb"><Icon name="ticket" size={22} /></div>
+                  <div className="row-main ticket-list-main">
+                    <div className="row-title ticket-list-title">{ticket.ticket_type?.name}</div>
+                    <div className="row-sub ticket-list-sub">{ticket.event?.title}</div>
+                    <div className="row-sub ticket-list-meta">
+                      {tab === 'unused' ? '有効期限' : '使用日'} {ticket.event?.date ? formatDate(ticket.event.date) : ''}
+                    </div>
                   </div>
-                </div>
-                <div className="ticket-list-right">
-                  <span
-                    className={`status-chip ${
-                      ticket.status === 'active' ? 'soft-success' : 'status-chip--used-soft'
-                    }`}
-                  >
-                    {ticket.status === 'active' ? '未使用' : '使用済'}
-                  </span>
-                </div>
-              </button>
-            ))}
-          </div>
-        )}
+                  {tab === 'unused' ? (
+                    <div className="row-right ticket-list-right">
+                      <div className="qty-large">1枚</div>
+                      <div className="caption">残数</div>
+                    </div>
+                  ) : (
+                    <div className="status-chip soft-danger">使用済み</div>
+                  )}
+                </button>
+              ))}
+            </div>
+          )}
+        </section>
       </div>
     </FanLayout>
   )
