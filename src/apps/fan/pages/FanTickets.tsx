@@ -82,6 +82,18 @@ export function FanTickets() {
           )}
         </section>
       </div>
+
+      {usedModal && (
+        <div className="modal-overlay" onClick={() => setUsedModal(false)}>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <h3>使用履歴</h3>
+            <p>この特典券はすでに使用済みです。詳細は購入履歴からご確認いただけます。</p>
+            <div className="modal-actions">
+              <button className="primary-btn" onClick={() => setUsedModal(false)}>閉じる</button>
+            </div>
+          </div>
+        </div>
+      )}
     </FanLayout>
   )
 }
