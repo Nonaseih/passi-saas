@@ -42,6 +42,10 @@ export function FanRoutes() {
         <Route path="/points/:groupId/history" element={<FanPointHistory />} />
         <Route path="/points/:groupId/reward/:rewardId" element={<FanPointReward />} />
         <Route path="/mypage" element={<FanMyPage />} />
+        <Route path="/mypage/profile" element={<FanProfileEdit />} />
+        <Route path="/mypage/oshi" element={<FanOshiGroups />} />
+        <Route path="/mypage/payment" element={<FanPayment />} />
+        <Route path="/mypage/address" element={<FanDeliveryAddress />} />
         <Route path="/notifications" element={<FanNotifications />} />
       </Route>
     </Routes>
